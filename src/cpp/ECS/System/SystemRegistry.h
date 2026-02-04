@@ -168,7 +168,7 @@ class SystemRegistry {
 
     mem::byte_arena<> updateStageAllocator = mem::create_byte_arena(sizeof(UpdateStage) * 5);
 public:
-    SystemRegistry();
+    ECSAPI SystemRegistry();
 
     SystemRegistry(const SystemRegistry&) = delete;
     SystemRegistry(SystemRegistry&&) = delete;
@@ -212,7 +212,7 @@ public:
         }
     }
 
-    void addStage(const ComponentField<StageField>& field, TypeUUID type);
+    ECSAPI void addStage(const ComponentField<StageField>& field, TypeUUID type);
 
     template <typename Stage, typename... Args>
     Stage& addStage(Args&&... args) {
@@ -263,7 +263,7 @@ public:
         return *static_cast<T*>(systemKindRegistry.getFieldOf<T>().instance);
     }
 
-    SystemProfileReport getProfileReport(const RuntimeSystemDescriptor& desc);
+    ECSAPI SystemProfileReport getProfileReport(const RuntimeSystemDescriptor& desc);
 
     SystemProfileReport getProfileReport(const TypeUUID system) {
         const auto& desc = *systemKindRegistry.getFieldOf(system).descriptor;
@@ -274,11 +274,11 @@ public:
         return StageProfileReport{stages[stage.id()].stagePtr};
     }
 
-    bool doSystemDependenciesExist(UpdateSystemDescriptor& descriptor);
+    ECSAPI bool doSystemDependenciesExist(UpdateSystemDescriptor& descriptor);
 
-    SystemErrorStack createExecutionGraph(StageEntry& stageEntry);
+    ECSAPI SystemErrorStack createExecutionGraph(StageEntry& stageEntry);
 
-    void createExecutionGraphs();
+    ECSAPI void createExecutionGraphs();
 
     auto& getUpdateStages() {
         return stages;

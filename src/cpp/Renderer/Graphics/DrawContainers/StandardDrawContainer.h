@@ -40,7 +40,7 @@ struct DrawCommand {
     DrawPrimitive drawPrimitive = DrawPrimitive::TRIANGLES;
 };
 
-class StandardDrawContainer final : public GraphicsDrawContainer {
+class RENDERERAPI StandardDrawContainer final : public GraphicsDrawContainer {
     GraphicsAllocator* allocator{};
     DrawCommand* commands{};
     size_t numCommands = 0;

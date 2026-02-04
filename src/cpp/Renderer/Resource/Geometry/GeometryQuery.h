@@ -4,7 +4,7 @@
 struct Geometry;
 struct DrawRange;
 
-class GeometryQuery {
+class RENDERERAPI GeometryQuery {
     GeometryResourceStorage* type;
 public:
     GeometryQuery(GeometryResourceStorage& type) : type(&type) {}

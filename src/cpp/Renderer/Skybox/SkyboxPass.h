@@ -3,7 +3,7 @@
 #include <Renderer/Resource/Texture/RenderTexture.h>
 #include <Renderer/Skybox/SkyboxSystem.h>
 
-class SkyboxPass : public IRenderPass {
+class RENDERERAPI SkyboxPass : public IRenderPass {
     RenderTexture colorTarget{};
     RenderTexture depthTarget{};
     BufferKey view{};

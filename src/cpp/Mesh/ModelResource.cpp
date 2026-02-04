@@ -8,6 +8,7 @@
 void ModelResourceSystem::onLoad(RendererLoadView view) {
     this->geometryResource = &view.getRenderer().getGeometryStorage();
     this->textureResource = &view.getRenderer().getTextureStorage();
+    this->buffers = &view.getRenderer().getBufferStorage();
     reallocateMeshSectionBuffer(meshSectionsCapacity);
     reallocatePBRMaterialBuffer(pbrMaterialsCapacity);
 }

@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "FCurve.h"
+#include "Mesh/MeshAPI.h"
 
 struct AnimationChannel {
     unsigned mesh;
@@ -22,10 +23,10 @@ public:
     ModelAnimation() = default;
     explicit ModelAnimation(std::string animationName) : name(std::move(animationName)) {}
 
-    void addRotation(const unsigned mesh, double time, float pitch, float yaw, float roll);
-    void addRotation(const unsigned mesh, double time, glm::quat rot);
-    void addTranslation(const unsigned mesh, double time, glm::vec3 position);
-    void addScale(const unsigned mesh, double time, glm::vec3 scale);
+    MESHAPI void addRotation(const unsigned mesh, double time, float pitch, float yaw, float roll);
+    MESHAPI void addRotation(const unsigned mesh, double time, glm::quat rot);
+    MESHAPI void addTranslation(const unsigned mesh, double time, glm::vec3 position);
+    MESHAPI void addScale(const unsigned mesh, double time, glm::vec3 scale);
 
     void clear() {
         channels.clear();

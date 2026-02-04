@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "ECS/ECSAPI.h"
 #include "memory/bitset.h"
 
 class BooleanArchetype {
@@ -13,20 +14,20 @@ public:
     BooleanArchetype(const BooleanArchetype&) = delete;
     BooleanArchetype& operator = (const BooleanArchetype&) = delete;
 
-    BooleanArchetype(BooleanArchetype&& other) noexcept;
-    BooleanArchetype& operator = (BooleanArchetype&& other) noexcept;
+    ECSAPI BooleanArchetype(BooleanArchetype&& other) noexcept;
+    ECSAPI BooleanArchetype& operator = (BooleanArchetype&& other) noexcept;
 
     ~BooleanArchetype() = default;
 
-    void add(const Entity* entities, size_t count);
+    ECSAPI void add(const Entity* entities, size_t count);
 
-    void remove(const Entity* entities, size_t count);
+    ECSAPI void remove(const Entity* entities, size_t count);
 
-    bool has(const Entity& entity);
+    ECSAPI bool has(const Entity& entity);
 
     bool isActive() const {
         return active;
     }
 
-    void reset();
+    ECSAPI void reset();
 };

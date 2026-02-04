@@ -1,7 +1,4 @@
 #pragma once
-#include <ECS/Component/Component.h>
-#include <ECS/Component/ComponentTypeRegistry.h>
-#include <ECS/Component/SingletonTypeRegistry.h>
 #include <memory/byte_arena.h>
 #include <UI/UI.h>
 #include <UI/Rendering/UIStyleType.h>

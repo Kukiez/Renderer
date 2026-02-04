@@ -98,15 +98,15 @@ public:
     ModelResourceSystem(ModelResourceSystem&&) = default;
     ModelResourceSystem& operator = (ModelResourceSystem&&) = default;
 
-    void onLoad(RendererLoadView view);
+    MESHAPI void onLoad(RendererLoadView view);
 
-    void reallocateMeshSectionBuffer(size_t newMeshSectionsCapacity);
+    MESHAPI void reallocateMeshSectionBuffer(size_t newMeshSectionsCapacity);
 
-    void reallocatePBRMaterialBuffer(size_t newPBRMaterialCapacity);
+    MESHAPI void reallocatePBRMaterialBuffer(size_t newPBRMaterialCapacity);
 
-    ModelKey loadModel(const ModelCooking::ModelLoadingCache& cache);
+    MESHAPI ModelKey loadModel(const ModelCooking::ModelLoadingCache& cache);
 
-    ModelAsset getAsset(ModelKey key);
+    MESHAPI ModelAsset getAsset(ModelKey key);
 
     const ModelData* getModelData(const ModelKey key) const {
         return &assets[key.index()];

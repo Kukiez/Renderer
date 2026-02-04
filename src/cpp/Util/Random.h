@@ -9,7 +9,7 @@
 
 class Random {
 public:
-    static std::mt19937 gen;
+    static inline std::mt19937 gen = std::mt19937(static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count()));
 
     static double Double(const Numeric auto min, const Numeric auto max) {
         return std::uniform_real_distribution<double>(

@@ -14,7 +14,7 @@ public:
 
     void setTargetCubemap(const TextureKey texture) { targetCubemap = texture; }
 
-    auto setViews(std::string_view name, const glm::mat4 *views) -> void ;
+    RENDERERAPI void setViews(std::string_view name, const glm::mat4 *views);
 
     void setClearTargets(ClearTarget targetForAll) {
         for (auto& t : clearTargets) t = targetForAll;

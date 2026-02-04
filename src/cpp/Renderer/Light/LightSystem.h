@@ -98,13 +98,13 @@ class LightSystem {
 
     PointLightPartitionSystem lightClusterPartition = {};
 public:
-    void onLoad(RendererLoadView view);
+    RENDERERAPI void onLoad(RendererLoadView view);
 
-    DirectionalLightCollection createDirectionalLightCollection(const glm::vec3& direction, const glm::vec3& color, float intensity, int resolution);
+    RENDERERAPI DirectionalLightCollection createDirectionalLightCollection(const glm::vec3& direction, const glm::vec3& color, float intensity, int resolution);
 
     GPUDirectionalLight& getDirectionalLight(unsigned index) { return directionalLights[index]; }
 
-    BufferKey createDirectionalLightsBuffer(const GraphicsPassInvocationBase& invocation) const;
+    RENDERERAPI BufferKey createDirectionalLightsBuffer(const GraphicsPassInvocationBase& invocation) const;
 
     PointLightPartitionSystem& getLightPartition() { return lightClusterPartition; }
 
@@ -119,7 +119,7 @@ class DirectionalLightPass : public IPassInvocation<DirectionalLightPass> {
     const RenderingPipeline* pipeline;
     const VisiblePrimitiveList* visible;
 public:
-    void onExecute(const Frame* frame, PassInvocationID id);
+    RENDERERAPI void onExecute(const Frame* frame, PassInvocationID id);
 
     DirectionalLightPass(const DirectionalLightCollection& light, const RenderingPipeline* pipeline, const VisiblePrimitiveList* visible) : light(light), pipeline(pipeline), visible(visible) {}
 

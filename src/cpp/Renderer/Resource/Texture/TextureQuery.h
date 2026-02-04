@@ -15,7 +15,7 @@ class Renderer;
 struct RenderTexture;
 struct MultiRenderTexture;
 
-class TextureQuery {
+class RENDERERAPI TextureQuery {
     TextureResourceType* textures;
 public:
     TextureQuery(TextureResourceType* textures) : textures(textures) {}

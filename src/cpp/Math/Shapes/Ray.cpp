@@ -1,7 +1,6 @@
 #include "Ray.h"
 #include "AABB.h"
 #include <glm/glm.hpp>
-#include <util/glm_double.h>
 
 RayResult Ray::intersects(const glm::vec3 &center, float radius) const {
     glm::vec3 oc = origin - center;

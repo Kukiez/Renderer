@@ -4,7 +4,7 @@
 #include <fstream>
 #include <ft2build.h>
 #include <string>
-#include <stb/stb_image_write.h>
+#include <stb_image_write.h>
 #include <Filesystem/Serializer.h>
 #include <Image/ImageLoader.h>
 

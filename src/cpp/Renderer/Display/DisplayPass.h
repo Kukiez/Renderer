@@ -28,7 +28,7 @@ struct DisplayPassDesc {
     SSAO ssao{};
 };
 
-class DisplayPass : public IRenderPass {
+class RENDERERAPI DisplayPass : public IRenderPass {
 protected:
     DisplayPassDesc desc;
 public:
@@ -38,7 +38,7 @@ public:
     void render(GraphicsContext& ctx) const override;
 };
 
-class DisplayDepthPass : public IRenderPass {
+class RENDERERAPI DisplayDepthPass : public IRenderPass {
     SamplerKey depthTexture{};
     Viewport viewport{};
     BufferKey cameraBuffer{};

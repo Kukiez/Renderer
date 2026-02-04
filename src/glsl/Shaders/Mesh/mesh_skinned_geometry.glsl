@@ -1,6 +1,5 @@
 #version 460 core
-#include "../../Mesh/model_header.glsl"
-#include "../../common/global_transforms.glsl"
+#include "../common/global_transforms.glsl"
 #line 5
 
 layout (location = 0) in vec3 aPos;

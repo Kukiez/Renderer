@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "ComponentKind.h"
+#include "ECS/ECSAPI.h"
 
 class ComponentIndex {
     unsigned index = 0;
@@ -37,9 +38,9 @@ class ComponentTypeRegistry {
 public:
     struct Impl;
 private:
-    static ComponentIndex getOrCreateComponentIndex(ComponentKind kind, const char* name);
-    static ComponentKind getComponentKind(const char* name);
-    static void initializeZeroComponentIndex(ComponentKind kind, const char* name);
+    static ECSAPI ComponentIndex getOrCreateComponentIndex(ComponentKind kind, const char* name);
+    static ECSAPI ComponentKind getComponentKind(const char* name);
+    static ECSAPI void initializeZeroComponentIndex(ComponentKind kind, const char* name);
 public:
     template <typename T>
     requires IsComponent<T>
@@ -103,4 +104,4 @@ ComponentIndex ComponentIndex::of() {
     return ComponentTypeRegistry::getOrCreateComponentIndex<T>();
 }
 
-std::ostream& operator << (std::ostream& os, ComponentKind kind);
+ECSAPI std::ostream& operator << (std::ostream& os, ComponentKind kind);

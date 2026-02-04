@@ -2,6 +2,8 @@
 #include <memory/TypeOps.h>
 #include <memory/function.h>
 
+#include "ECS/ECSAPI.h"
+
 using EnumerableConstructCallback = mem::function<void(void*, size_t), mem::small_buffer_dynamic_allocator<40>>;
 
 struct SystemEnumerable {
@@ -23,15 +25,15 @@ struct SystemEnumerable {
     SystemEnumerable(const SystemEnumerable&) = delete;
     SystemEnumerable& operator = (const SystemEnumerable&) = delete;
 
-    SystemEnumerable(SystemEnumerable&& other) noexcept;
+    ECSAPI SystemEnumerable(SystemEnumerable&& other) noexcept;
 
-    SystemEnumerable& operator = (SystemEnumerable&& other) noexcept;
+    ECSAPI SystemEnumerable& operator = (SystemEnumerable&& other) noexcept;
 
-    void initialize(size_t newCount);
+    ECSAPI void initialize(size_t newCount);
 
-    void reinitialize(size_t newCount);
+    ECSAPI void reinitialize(size_t newCount);
 
-    ~SystemEnumerable();
+    ECSAPI ~SystemEnumerable();
 
     size_t size() const {
         return count;

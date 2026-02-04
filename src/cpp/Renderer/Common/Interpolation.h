@@ -3,7 +3,7 @@
 #include <string>
 #include <glm/detail/type_quat.hpp>
 #include <glm/ext/scalar_constants.hpp>
-#include <util/glm_double.h>
+#include <glm/gtx/quaternion.hpp>
 
 using EasingFunction = double (*)(double);
 

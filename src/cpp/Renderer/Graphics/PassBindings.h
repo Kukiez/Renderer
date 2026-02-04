@@ -16,7 +16,7 @@ struct BufferBinding {
     }
 };
 
-class BufferBindingsSet {
+class RENDERERAPI BufferBindingsSet {
     GraphicsAllocator* allocator{};
     BufferBinding* bindings{};
     size_t numBindings{};

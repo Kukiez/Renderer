@@ -6,13 +6,13 @@ struct LevelRuntime {
     bool firstRun = false;
     SteadyTime deltaTime = SteadyTime(0);
 
-    void synchronize(Level& topLevel) const;
+    ECSAPI void synchronize(Level& topLevel) const;
 
-    void runUpdateStage(UpdateStage& stage, Level& topLevel, SystemInvokeParams invokeParams = {}) const;
+    ECSAPI void runUpdateStage(UpdateStage& stage, Level& topLevel, SystemInvokeParams invokeParams = {}) const;
 
-    void runUpdateStages(auto& stages, Level& topLevel);
+    ECSAPI void runUpdateStages(auto& stages, Level& topLevel);
 
-    void runLevel(Level& topLevel);
+    ECSAPI void runLevel(Level& topLevel);
 
-    void endFrame(Level& topLevel) const;
+    ECSAPI void endFrame(Level& topLevel) const;
 };

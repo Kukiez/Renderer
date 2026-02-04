@@ -10,12 +10,6 @@ struct MouseState;
 
 namespace ui {
     class UIWindowLayoutContext {
-        UIWindowObject* rootObj{};
-        std::unordered_set<UIRuntimeObject*> dirtyObjects;
-    public:
-        UIWindowLayoutContext() = default;
-        UIWindowLayoutContext(UIWindowObject* root) : rootObj(root) {}
-
         static glm::vec2 clampChildToParent(
             const UIBounds& parent,
             const UIBounds& child);
@@ -28,24 +22,30 @@ namespace ui {
 
         void updateNodeChildrenTransforms(UIRuntimeObject* parent);
 
-        void updateLayout();
+        UIWindowObject* rootObj{};
+        std::unordered_set<UIRuntimeObject*> dirtyObjects;
+    public:
+        UIWindowLayoutContext() = default;
+        UIWindowLayoutContext(UIWindowObject* root) : rootObj(root) {}
 
-        void addDirty(UIRuntimeObject* obj);
+        UIAPI void updateLayout();
+
+        UIAPI void addDirty(UIRuntimeObject* obj);
 
         auto& getRoot() const { return rootObj; }
         auto& getRoot() { return rootObj; }
 
         UIRuntimeObject* getObject(UIRuntimeObject* parent, glm::vec2 position) const;
-        UIRuntimeObject* getObject(glm::vec2 position) const;
+        UIAPI UIRuntimeObject* getObject(glm::vec2 position) const;
 
-        void handleDragMotionEvent(UICursor& cursor, const MouseState &mouse, const MouseMotionEvent &event);
+        UIAPI void handleDragMotionEvent(UICursor& cursor, const MouseState &mouse, const MouseMotionEvent &event);
 
-        void handleDragEndEvent(UICursor &cursor, const MouseState &mouse, const MouseButtonEvent &event);
+        UIAPI void handleDragEndEvent(UICursor &cursor, const MouseState &mouse, const MouseButtonEvent &event);
 
-        void handleClickEvent(UICursor &cursor, const MouseState& mouse, const MouseButtonEvent &event);
+        UIAPI void handleClickEvent(UICursor &cursor, const MouseState& mouse, const MouseButtonEvent &event);
 
-        void handleMotionEvent(UICursor &cursor, const MouseState& mouse, const MouseMotionEvent &event);
+        UIAPI void handleMotionEvent(UICursor &cursor, const MouseState& mouse, const MouseMotionEvent &event);
 
-        void handleWheelEvent(UICursor &cursor, const MouseState& mouse, const MouseMotionEvent &event) const;
+        UIAPI void handleWheelEvent(UICursor &cursor, const MouseState& mouse, const MouseMotionEvent &event) const;
     };
 }

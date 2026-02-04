@@ -6,7 +6,7 @@
 #include "RenderingStages/LoadPass.h"
 #include "Resource/Geometry/GeometryKey.h"
 #include "Resource/Shader/ShaderKey.h"
-#include "Export.h"
+#include "RendererAPI.h"
 
 struct RenderState;
 class BufferResourceStorage;
@@ -39,7 +39,7 @@ public:
     void reset();
 };
 
-class RAPI Renderer {
+class RENDERERAPI Renderer {
     struct Impl;
 
     size_t frameIndex = 0;

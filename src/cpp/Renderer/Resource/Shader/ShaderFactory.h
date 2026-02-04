@@ -1,11 +1,12 @@
 #pragma once
 #include "ShaderDescriptor.h"
 #include "ShaderKey.h"
+#include "RendererAPI.h"
 
 class ShaderComponentType;
 class Renderer;
 
-class ShaderFactory {
+class RENDERERAPI ShaderFactory {
     friend class ShaderSynchronousFactory;
 
     static void setNamedShader(ShaderComponentType* shaders, ShaderKey key, ComponentIndex name, const mem::type_info* type);

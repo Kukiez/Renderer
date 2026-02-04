@@ -1,4 +1,6 @@
 #pragma once
+#include <glm/vec2.hpp>
+#include <Math/GlmPrint.h>
 
 namespace ui {
     struct UITransform {
@@ -25,8 +27,8 @@ namespace ui {
             return UITransform{ position / scalar, size / scalar };
         }
 
-        UITransform  operator*(double result_weight) const {
-            return UITransform{ position * result_weight, size * result_weight };
+        UITransform  operator*(double weight) const {
+            return UITransform{ position * static_cast<float>(weight), size * static_cast<float>(weight) };
         }
     };
 

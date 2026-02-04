@@ -47,7 +47,7 @@ struct GeometryDescriptor {
     }
 };
 
-class GeometryFactory : public EntityComponentFactory {
+class RENDERERAPI GeometryFactory : public EntityComponentFactory {
     friend class VertexLayoutBuilder;
 
     GeometryResourceStorage* type;

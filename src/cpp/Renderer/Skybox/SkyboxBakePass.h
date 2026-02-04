@@ -3,7 +3,7 @@
 #include <Renderer/Graphics/Passes/IRenderPass.h>
 #include <Renderer/Skybox/SkyboxSystem.h>
 
-class SkyboxBakePass : public IRenderPass {
+class RENDERERAPI SkyboxBakePass : public IRenderPass {
     Skybox* outSkybox{};
     Filepath hdriFile;
 public:

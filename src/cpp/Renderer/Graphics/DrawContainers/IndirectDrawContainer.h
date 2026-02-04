@@ -14,7 +14,7 @@ struct IndirectDrawCommand {
     DrawPrimitive drawPrimitive = DrawPrimitive::TRIANGLES;
 };
 
-class IndirectDrawContainer : public GraphicsDrawContainer {
+class RENDERERAPI IndirectDrawContainer : public GraphicsDrawContainer {
     GraphicsAllocator* allocator{};
     IndirectDrawCommand* commands{};
     size_t numCommands = 0;
@@ -35,7 +35,7 @@ struct DrawElementsIndirectCommand {
     unsigned baseInstance = 0;
 };
 
-class StandardElementsIndirectMultiDrawContainer : public GraphicsDrawContainer {
+class RENDERERAPI StandardElementsIndirectMultiDrawContainer : public GraphicsDrawContainer {
     struct IndirectRange {
         GeometryKey geometry{};
         DrawPrimitive primitive{};

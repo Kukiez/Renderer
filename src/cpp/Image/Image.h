@@ -4,11 +4,10 @@
 #include <cmath>
 #include <cstdint>
 #include <cstring>
-#include <half.h>
 #include "ImageDesc.h"
+#include "ImageAPI.h"
 
-
-class Image : public ImageDescriptor {
+class IMAGEAPI Image : public ImageDescriptor {
     ImageHandle myHandle{};
     void* myPixels{};
 public:

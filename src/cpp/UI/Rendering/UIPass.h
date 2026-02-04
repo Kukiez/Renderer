@@ -38,5 +38,5 @@ class UIPass : IPassInvocation<UIPass> {
 public:
     UIPass(ui::UIRenderingContext* drawCommands, const UIRenderingPipeline* pipeline, const RenderTexture &renderTarget) : context(drawCommands), pipeline(pipeline), renderTarget(renderTarget) {}
 
-    void onExecute(const Frame* frame, PassInvocationID id);
+    UIAPI void onExecute(const Frame* frame, PassInvocationID id);
 };

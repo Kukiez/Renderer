@@ -5,14 +5,14 @@
 #include "PassBindings.h"
 #include "Passes/IRenderPass.h"
 
-struct GraphicsDrawContainer {
+struct RENDERERAPI GraphicsDrawContainer {
     virtual void draw(GraphicsContext& ctx) = 0;
 };
 
 template <typename GDC>
 concept IsGraphicsDrawContainer = std::is_base_of_v<GraphicsDrawContainer, GDC>;
 
-class GraphicsPass : public IGraphicsPass {
+class RENDERERAPI GraphicsPass : public IGraphicsPass {
     GraphicsDrawContainer* drawContainer{};
 
     GraphicsFeature** features = nullptr;

@@ -7,7 +7,7 @@
 
 struct OpaqueRenderingPass : IRenderingPass<OpaqueRenderingPass> {};
 
-struct OpaquePass : GraphicsPassBase<OpaquePass>, IPassInvocation<OpaquePass> {
+struct RENDERERAPI OpaquePass : GraphicsPassBase<OpaquePass>, IPassInvocation<OpaquePass> {
     Skybox skybox;
 
     using GraphicsPassBase::onExecute;
@@ -37,7 +37,7 @@ struct OpaquePass : GraphicsPassBase<OpaquePass>, IPassInvocation<OpaquePass> {
 
 struct DepthRenderingPass : IRenderingPass<DepthRenderingPass> {};
 
-struct DepthPass : GraphicsPassBase<DepthPass>, IPassInvocation<DepthPass> {
+struct RENDERERAPI DepthPass : GraphicsPassBase<DepthPass>, IPassInvocation<DepthPass> {
     using GraphicsPassBase::onExecute;
 
     DepthPass(
@@ -53,7 +53,7 @@ struct DepthPass : GraphicsPassBase<DepthPass>, IPassInvocation<DepthPass> {
     void onPassEnd(const GraphicsPassInvocationBase& invocation) {}
 };
 
-struct TransparentRenderingPass : IRenderingPass<TransparentRenderingPass> {
+struct RENDERERAPI TransparentRenderingPass : IRenderingPass<TransparentRenderingPass> {
     void onPassBegin(const GraphicsPassInvocationBase& invocation);
     void onPassEnd(const GraphicsPassInvocationBase& invocation);
 };

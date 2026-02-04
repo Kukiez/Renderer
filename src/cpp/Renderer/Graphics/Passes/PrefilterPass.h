@@ -1,6 +1,6 @@
 #pragma once
 
-class PrefilterMapPass final : public EnvCubemapPass {
+class RENDERERAPI PrefilterMapPass final : public EnvCubemapPass {
     UniformParameterIndex roughnessIndex{};
     Mipmap mipmaps{};
 public:
@@ -9,6 +9,7 @@ public:
     void setMips(Mipmap levels) {
         mipmaps = levels;
     }
+
     void setRoughness(std::string_view rough);
 
     void render(GraphicsContext& ctx) const override;

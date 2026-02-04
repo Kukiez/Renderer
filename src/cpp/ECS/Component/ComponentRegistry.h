@@ -156,4 +156,4 @@ public:
 template <typename Registry>
 concept IsComponentKindRegistry = cexpr::is_base_of_template<ComponentKindRegistry, Registry>;
 
-std::ostream& operator << (std::ostream& os, const TypeUUID type);
+ECSAPI std::ostream& operator << (std::ostream& os, const TypeUUID type);

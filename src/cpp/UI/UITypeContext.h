@@ -6,6 +6,8 @@
 #include <oneapi/tbb/concurrent_vector.h>
 #include <ECS/Component/SingletonTypeRegistry.h>
 
+#include "UIAPI.h"
+
 namespace ui {
     class UIObject;
     class UIRenderingContext;
@@ -161,5 +163,5 @@ namespace ui {
         }
     };
 
-    extern ecs::TypeContext<UIObjectComponentType> UITypes;
+    UIAPI extern ecs::TypeContext<UIObjectComponentType> UITypes;
 }

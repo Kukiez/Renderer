@@ -1,5 +1,5 @@
 #pragma once
-#include <half.h>
+#include <Imath/half.h>
 
 enum class PixelType {
     BYTE,

@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <atomic>
 
+#include "RendererAPI.h"
+
 class BufferKey;
 class BufferResourceStorage;
 
@@ -37,11 +39,11 @@ struct BufferBlockData {
         targetSize = std::min(targetSize, size - targetOffset);
     }
 
-    AMappedBufferRange createStagingBufferForRange(size_t byteOffset, size_t byteSize);
+    RENDERERAPI AMappedBufferRange createStagingBufferForRange(size_t byteOffset, size_t byteSize);
 
-    void destroyBuffer(BufferKey& buffer) const;
+    RENDERERAPI void destroyBuffer(BufferKey& buffer) const;
 
-    void resize(BufferKey& buffer, size_t copySrcOffset, size_t copyDstOffset, size_t copyBytes, size_t newBufferCapacity) const;
+    RENDERERAPI void resize(BufferKey& buffer, size_t copySrcOffset, size_t copyDstOffset, size_t copyBytes, size_t newBufferCapacity) const;
 };
 
 class BufferKey {

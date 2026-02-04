@@ -1,10 +1,9 @@
 #pragma once
-#define GLM_ENABLE_EXPERIMENTAL
 #include "glm/fwd.hpp"
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
-#include <util/glm_double.h>
+#include <GlmPrint.h>
 #include <iomanip>
 
 

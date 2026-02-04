@@ -16,9 +16,9 @@ public:
     Level(Level&&) = delete;
     Level& operator = (Level&&) = delete;
 
-    explicit Level(const std::string &name);
+    ECSAPI explicit Level(const std::string &name);
 
-    void initialize();
+    ECSAPI void initialize();
 
     template <typename S>
     requires IsSystem<S> || IsSystemPack<S>
@@ -82,8 +82,8 @@ public:
         return ctx.systemRegistry.getSystem<Sys>();
     }
 
-    void run();
-    void endFrame();
+    ECSAPI void run();
+    ECSAPI void endFrame();
 
     template <IsActiveStage Stage>
     void run() {

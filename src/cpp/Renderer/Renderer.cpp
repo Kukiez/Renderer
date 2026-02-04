@@ -84,8 +84,10 @@ void Renderer::initialize() {
 
     impl->fullScreenQuad = GeometryFactory(impl->geometryStorage).loadGeometry(quadDesc);
     synchronize();
+    level.initialize();
     level.run<RendererLoadResources>();
     synchronize();
+    std::cout << "Renderer initialized" << std::endl;
 }
 
 

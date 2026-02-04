@@ -11,5 +11,5 @@ public:
     explicit ClearPass(const std::string_view name, const RenderTexture &texture, const glm::vec4 clearColor, ClearTarget clearTargets = {})
     : IRenderPass(name), clearColor(clearColor), texture(texture), clearTargets(clearTargets) {}
 
-    void render(GraphicsContext& ctx) const override;
+    RENDERERAPI void render(GraphicsContext& ctx) const override;
 };

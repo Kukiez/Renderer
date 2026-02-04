@@ -3,6 +3,7 @@
 
 #include "StageInterface.h"
 #include "SystemGraph.h"
+#include "ECS/ECSAPI.h"
 #include "ECS/Component/TypeUUID.h"
 #include "ECS/System/RuntimeSystemDescriptor.h"
 #include "ECS/System/StageKindRegistry.h"
@@ -303,9 +304,9 @@ struct UpdateStage {
         return graph.size();
     }
 
-    void onStageBegin(Level& level);
+    ECSAPI void onStageBegin(Level& level);
 
-    void onStageEnd(Level& level);
+    ECSAPI void onStageEnd(Level& level);
 
     template <typename Fn>
     void forEachSystem(Fn&& fn) {
@@ -355,21 +356,21 @@ struct UpdateStage {
         return timeAccumulator >= stage->hz;
     }
 
-    void addSystem(RuntimeSystemStageDescriptor &descriptor, TypeUUID type, void* instance);
+    ECSAPI void addSystem(RuntimeSystemStageDescriptor &descriptor, TypeUUID type, void* instance);
 
     auto& getExecutionGraph() {
         return executor;
     }
 
-    void createExecutionGraph(ExecutionGraphCreationContext& ctx);
+    ECSAPI void createExecutionGraph(ExecutionGraphCreationContext& ctx);
 
     bool isRunnable() const {
         return !executor.nodes.empty();
     }
 
-    void dumpMermaid(const SystemKindRegistry& registry);
+    ECSAPI void dumpMermaid(const SystemKindRegistry& registry);
 
-    void discard(const size_t graphIndex);
+    ECSAPI void discard(const size_t graphIndex);
 
     auto& systems() {
         return graph.nodes;

@@ -17,8 +17,8 @@ namespace ui {
         std::vector<unsigned> transformAnimationFreeIndices{};
 
     public:
-        void advanceTransformAnimations(double deltaTime);
+        UIAPI void advanceTransformAnimations(double deltaTime);
 
-        void beginTransformAnimation(const UIRuntimeObject *uiObj, UITransformAnimationState *animObj, const UITransformAnimation &animation);
+        UIAPI void beginTransformAnimation(const UIRuntimeObject *uiObj, UITransformAnimationState *animObj, const UITransformAnimation &animation);
     };
 }

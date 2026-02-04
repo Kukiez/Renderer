@@ -84,17 +84,17 @@ namespace ui {
             return {objData};
         }
 
-        void addObject(UIObject obj);
+        UIAPI void addObject(UIObject obj);
 
-        void destroyObject(UIObject obj);
+        UIAPI void destroyObject(UIObject obj);
 
-        void render(UIRenderingContext& ctx) const;
+        UIAPI void render(UIRenderingContext& ctx) const;
 
-        bool clickCursor(UICursorObject cursor, const MouseState& mouse, const MouseButtonEvent& button);
+        UIAPI bool clickCursor(UICursorObject cursor, const MouseState& mouse, const MouseButtonEvent& button);
 
-        bool moveCursor(UICursorObject cursor, const MouseState& mouse, const MouseMotionEvent& motion);
+        UIAPI bool moveCursor(UICursorObject cursor, const MouseState& mouse, const MouseMotionEvent& motion);
 
-        bool moveCursorWheel(UICursorObject cursor, const MouseState& mouse, const MouseMotionEvent& wheel);
+        UIAPI bool moveCursorWheel(UICursorObject cursor, const MouseState& mouse, const MouseMotionEvent& wheel);
 
         void updateLayout() {
             layout.updateLayout();

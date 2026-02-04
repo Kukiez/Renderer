@@ -12,7 +12,7 @@ namespace ui {
     struct UIWindowDesc;
     class UIWindowContext;
 
-    class UIContext {
+    class UIAPI UIContext {
         std::vector<UICursor*> cursors;
         std::vector<UIWindowObject*> windows;
     public:

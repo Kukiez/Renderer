@@ -1,4 +1,5 @@
 #pragma once
+#include "RendererAPI.h"
 
 struct ComputeCommand {
     glm::ivec3 invocations{};
@@ -15,10 +16,10 @@ class ComputeCmdContainer final : public GraphicsDrawContainer {
     size_t numCommands = 0;
     size_t capCommands = 0;
 public:
-    explicit ComputeCmdContainer(GraphicsAllocator* allocator, size_t capCommands = 2);
+    RENDERERAPI explicit ComputeCmdContainer(GraphicsAllocator* allocator, size_t capCommands = 2);
 
-    void dispatch(const ComputeCommand& command);
-    void dispatch(int x, int y, int z);
+    RENDERERAPI void dispatch(const ComputeCommand& command);
+    RENDERERAPI void dispatch(int x, int y, int z);
 
     void draw(GraphicsContext& ctx) override;
 };
@@ -29,9 +30,9 @@ class IndirectComputeCmdContainer final : public GraphicsDrawContainer {
     uint32_t numCommands = 0;
     uint32_t capCommands = 0;
 public:
-    explicit IndirectComputeCmdContainer(GraphicsAllocator* allocator, size_t capCommands = 1);
+    RENDERERAPI explicit IndirectComputeCmdContainer(GraphicsAllocator* allocator, size_t capCommands = 1);
 
-    void dispatch(const IndirectComputeCommand& command);
+    RENDERERAPI void dispatch(const IndirectComputeCommand& command);
 
     void draw(GraphicsContext& ctx) override;
 };

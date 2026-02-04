@@ -8,7 +8,7 @@ struct BloomParams {
     float filterRadius = 0.005f;
 };
 
-class BloomPass : public IRenderPass {
+class RENDERERAPI BloomPass : public IRenderPass {
     TextureKey inBloomTexture;
     TextureKey outBloomResult{};
 

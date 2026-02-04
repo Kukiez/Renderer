@@ -5,7 +5,7 @@
 class TextureResourceType;
 class Renderer;
 
-class TextureFactory : public EntityComponentFactory {
+class RENDERERAPI TextureFactory {
     TextureResourceType* textures;
 public:
     TextureFactory(TextureResourceType* textureStorage) : textures(textureStorage) {}

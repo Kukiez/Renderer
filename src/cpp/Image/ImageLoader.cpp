@@ -2,17 +2,17 @@
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
 #include <algorithm>
-#include <stb/stb_image.h>
+#include <stb_image.h>
 #include <filesystem>
 #include <unordered_map>
 #include <fstream>
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
-#include "stb/stb_image_write.h"
-#include <ImfRgbaFile.h>   // for Imf::Rgba, Imf::RgbaInputFile
-#include <ImfArray.h>      // for Imf::Array2D
+#include "stb_image_write.h"
+#include <ImfRgbaFile.h>
+#include <ImfArray.h>
 #include <half.h>
-#include <Util/enum_bit.h>
+#include <../Util/enum_bit.h>
 
 using namespace OPENEXR_IMF_NAMESPACE;
 using namespace OPENEXR_IMF_NAMESPACE;

@@ -2,6 +2,8 @@
 #include <ECS/Component/Component.h>
 #include <ECS/Component/SingletonTypeRegistry.h>
 
+#include "RendererAPI.h"
+
 class GraphicsPassInvocation;
 class Renderer;
 class RenderInvocation;
@@ -34,31 +36,11 @@ class RenderingPassType {
             return VTable::of<Pass>();
         }
 
-        void onFlush() {
-            if (nameToPassPending.empty()) return;
+        RENDERERAPI void onFlush();
 
-            passToTable.resize(nameToPassPending.size() + passToTable.size());
-
-            for (auto& [table, typeID] : nameToPassPending) {
-                nameToPass.emplace(table.name, typeID);
-                passToTable[typeID.id()] = table;
-            }
-            nameToPassPending.clear();
-        }
-
-        TypeID findPassByName(const std::string_view name) {
-            const auto it = nameToPass.find(name);
-
-            if (it != nameToPass.end()) {
-                return it->second;
-            }
-            for (auto& [pName, typeID] : nameToPassPending) {
-                if (pName.name == name) return typeID;
-            }
-            return {};
-        }
+        RENDERERAPI TypeID findPassByName(const std::string_view name);
     };
-    static ecs::TypeContext<Ctx> ctx;
+    RENDERERAPI static ecs::TypeContext<Ctx> ctx;
 
     unsigned myID{};
 public:

@@ -1,11 +1,10 @@
 #pragma once
-#include <cstring>
-
-#include "../ResourceKey.h"
 #include "BufferKey.h"
 #include <memory/AtomicPopList.h>
 #include <memory/byte_arena.h>
 #include <oneapi/tbb/enumerable_thread_specific.h>
+
+#include "RendererAPI.h"
 
 class BufferResourceStorage;
 struct LevelContext;
@@ -93,11 +92,11 @@ public:
         return (bytes + 15) & ~15;
     }
 
-    BufferKey createBuffer(size_t bytes, BufferUsageHint usage);
+    RENDERERAPI BufferKey createBuffer(size_t bytes, BufferUsageHint usage);
 
-    void destroyBuffer(BufferKey buffer);
+    RENDERERAPI void destroyBuffer(BufferKey buffer);
 
-    std::pair<BufferKey, AMappedBufferRange> createBufferWithData(size_t bytes, BufferUsageHint usage);
+    RENDERERAPI std::pair<BufferKey, AMappedBufferRange> createBufferWithData(size_t bytes, BufferUsageHint usage);
 
     template <typename T>
     std::pair<BufferKey, TMappedBufferRange<T>> createBufferWithData(size_t tElements, BufferUsageHint usage) {
@@ -105,7 +104,7 @@ public:
         return {buf, rng.as<T>()};
     }
 
-    AMappedBufferRange createStagingRegion(BufferBlockData* block, size_t offset = 0, size_t bytes = -1);
+    RENDERERAPI AMappedBufferRange createStagingRegion(BufferBlockData* block, size_t offset = 0, size_t bytes = -1);
 
     AMappedBufferRange createStagingRegion(const BufferKey forBuffer, const size_t offset = 0, const size_t bytes = -1) {
         return createStagingRegion(forBuffer.buffer, offset, bytes);
@@ -116,14 +115,14 @@ public:
         return createStagingRegion(buffer, tOffset * sizeof(T), tSize * sizeof(T)).as<T>();
     }
 
-    void createStagingRegionOfExistingMemory(const BufferBlockData* block, size_t offset, AMappedBufferRange range);
+    RENDERERAPI void createStagingRegionOfExistingMemory(const BufferBlockData* block, size_t offset, AMappedBufferRange range);
 
     template <typename T>
     BufferKey createBuffer(const size_t tElements, const BufferUsageHint usage) {
         return createBuffer(tElements * sizeof(T), usage);
     }
 
-    void copyBufferRange(CopyBufferRange copy);
+    RENDERERAPI void copyBufferRange(CopyBufferRange copy);
 
-    BufferKey copyFromBuffer(BufferKey buffer, size_t newSize, size_t copySrcOffset, size_t copyDstOffset, size_t copySize);
+    RENDERERAPI BufferKey copyFromBuffer(BufferKey buffer, size_t newSize, size_t copySrcOffset, size_t copyDstOffset, size_t copySize);
 };

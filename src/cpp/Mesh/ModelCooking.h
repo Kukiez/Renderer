@@ -7,6 +7,8 @@
 #include "Animation/ModelAnimation.h"
 #include <Renderer/Common/Transform.h>
 
+#include "MeshAPI.h"
+
 struct aiString;
 struct aiMesh;
 struct aiNode;
@@ -201,7 +203,7 @@ public:
             return *new (this) ModelLoadingCache(std::move(other));
         }
 
-        ~ModelLoadingCache();
+        MESHAPI ~ModelLoadingCache();
 
         std::span<const Mesh> getMeshes() const { return std::span(meshes, numMeshes); }
     };
@@ -243,7 +245,7 @@ public:
         return {params};
     }
 
-    ModelLoadingCache cook();
+    MESHAPI ModelLoadingCache cook();
 
-    void discard();
+    MESHAPI void discard();
 };

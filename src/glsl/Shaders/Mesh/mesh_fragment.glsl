@@ -1,8 +1,7 @@
 #version 460 core
 #extension GL_ARB_gpu_shader_int64 : enable
-#include "../../Passes/OpaqueRenderingPass.glsl"
-#include "../../common/global_transforms.glsl"
-#include "../../Mesh/model_header.glsl"
+#include "../Passes/OpaquePassMaterial.glsl"
+#include "../common/global_transforms.glsl"
 #line 7
 
 in vec2 TexCoords;
@@ -60,5 +59,5 @@ void main() {
     surface.F0 = 0;
     surface.opacity = 1;
 
-    OpaqueRenderingPass(surface);
+	pass_main(surface);
 }

@@ -4,8 +4,9 @@
 #include <Renderer/Scene/Primitives/Primitive.h>
 #include <Renderer/Scene/Primitives/WorldCullCallback.h>
 #include <Renderer/Common/Frustum.h>
+#include "RendererAPI.h"
 
-class MipWorld : public IPrimitiveWorld<MipWorld> {
+class RENDERERAPI MipWorld : public IPrimitiveWorld<MipWorld> {
 public:
     struct CreateInfo {
         glm::ivec3 position = glm::ivec3(0);

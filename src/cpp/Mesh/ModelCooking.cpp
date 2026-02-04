@@ -420,6 +420,11 @@ ModelCooking::ModelLoadingCache ModelCooking::cook() {
     Assimp::Importer importer;
     auto scene = importer.ReadFile(params.path.data(), AI_PROCESS_FLAGS);
 
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        std::cout << "Failed to load Model: " << importer.GetErrorString() << std::endl;
+        return {};
+    }
+
     cache.scene = scene;
     cache.directory = params.path.substr(0, params.path.find_last_of('/'));
 

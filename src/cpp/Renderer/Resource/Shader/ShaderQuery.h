@@ -5,7 +5,7 @@ class ShaderClass;
 class ShaderProgram;
 class Renderer;
 
-class ShaderQuery {
+class RENDERERAPI ShaderQuery {
 
     ShaderComponentType* type;
 public:

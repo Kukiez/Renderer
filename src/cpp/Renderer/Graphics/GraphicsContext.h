@@ -19,7 +19,7 @@ enum class BufferTarget : uint8_t {
     INDIRECT_COMPUTE_BUFFER
 };
 
-class GraphicsContext {
+class RENDERERAPI GraphicsContext {
     Renderer* renderer;
     RenderState currentState{};
     const ShaderProgram* currentShaderProgram = nullptr;

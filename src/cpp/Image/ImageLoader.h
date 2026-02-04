@@ -1,6 +1,6 @@
 #pragma once
 #include <algorithm>
-#include <Image/Image.h>
+#include <Image.h>
 
 enum class ImageLoadOptions {
     NONE = 0,
@@ -33,7 +33,7 @@ struct SourceChannel {
     }
 };
 
-class ImageProcessor {
+class IMAGEAPI ImageProcessor {
 public:
     static Image& flip(Image& image);
     static Image merge(SourceChannel red, SourceChannel green, SourceChannel blue, SourceChannel alpha, const PixelType pixelType);
@@ -47,13 +47,13 @@ class ImageLoader {
         Loader loader;
     };
 
-    static Image loadImpl(const std::string_view file, const ImageLoadParams& params);
+    static IMAGEAPI Image loadImpl(const std::string_view file, const ImageLoadParams& params);
 public:
     static constexpr auto STD_CHAR_FREE_FN = [](void* img) {
         delete[] static_cast<char*>(img);
     };
 
-    static Image empty(const unsigned width, const unsigned height, PixelType type, ImageChannels channels, const DynamicPixel &value);
+    static IMAGEAPI Image empty(const unsigned width, const unsigned height, PixelType type, ImageChannels channels, const DynamicPixel &value);
 
     static Image load(const std::string_view file, const ImageLoadParams& params = {}) {
         return loadImpl(file, params);
@@ -65,9 +65,9 @@ public:
         return loadImpl(file, params);
     }
 
-    static Image procedural(unsigned width, unsigned height, PixelType type, ImageChannels channels);
+    static IMAGEAPI Image procedural(unsigned width, unsigned height, PixelType type, ImageChannels channels);
 
-    static Image& fill(Image& dstView, const void* pixels, PixelType pixelsType);
+    static IMAGEAPI Image& fill(Image& dstView, const void* pixels, PixelType pixelsType);
 
-    static bool save(Image& img, std::string_view filename);
+    static IMAGEAPI bool save(Image& img, std::string_view filename);
 };

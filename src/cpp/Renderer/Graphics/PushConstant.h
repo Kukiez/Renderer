@@ -2,6 +2,7 @@
 #include <bitset>
 #include <string_view>
 #include <openGL/Shader/ShaderReflection.h>
+#include "RendererAPI.h"
 
 struct ShaderUniformParameter;
 struct GraphicsAllocator;
@@ -14,7 +15,7 @@ class ShaderProgram;
 
 enum class UniformParameterType;
 
-class PushConstantSet {
+class RENDERERAPI PushConstantSet {
     void push(const UniformParameterIndex& index, const void* push, size_t pushBytes);
     UniformParameterType push(const ShaderString& str, const void* push, size_t pushBytes);
 

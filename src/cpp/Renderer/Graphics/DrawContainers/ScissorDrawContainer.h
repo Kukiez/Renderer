@@ -7,7 +7,7 @@ struct ScissorDrawCommand : DrawCommand {
     ScissorState scissor{};
 };
 
-class ScissorDrawContainer final : public GraphicsDrawContainer {
+class RENDERERAPI ScissorDrawContainer final : public GraphicsDrawContainer {
     GraphicsAllocator* allocator{};
     ScissorDrawCommand* commands{};
     size_t numCommands = 0;

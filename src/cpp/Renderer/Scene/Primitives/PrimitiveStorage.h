@@ -3,18 +3,10 @@
 
 #include "Primitive.h"
 #include "Renderer/Common/TypeAllocator.h"
+#include "RendererAPI.h"
 
-struct PrimitiveBuffer {
-    std::vector<Primitive> primitives{};
-
-    PrimitiveBuffer() = default;
-    PrimitiveBuffer(std::initializer_list<Primitive> primitives) : primitives(primitives) {}
-};
-
-class PrimitiveStorage {
-
+class RENDERERAPI PrimitiveStorage {
     std::vector<PrimitiveCollection> collections{};
-
     std::vector<TypeAllocatorArray> allocators{};
 
     std::vector<uint8_t> generations{};

@@ -6,6 +6,7 @@
 #include <glm/vec4.hpp>
 #include <Image/Image.h>
 
+#include "UIAPI.h"
 #include "UIFont.h"
 
 struct UIFontPixels {
@@ -58,7 +59,7 @@ struct FontRAsset {
 class UIFontLoader {
 
 public:
-    static std::pair<FontAsset, FontRAsset> cookFont(std::string_view path, std::string_view as, int resolution);
+    UIAPI static std::pair<FontAsset, FontRAsset> cookFont(std::string_view path, std::string_view as, int resolution);
 
-    FontAsset loadFont(std::string_view font, int resolution);
+    UIAPI FontAsset loadFont(std::string_view font, int resolution);
 };

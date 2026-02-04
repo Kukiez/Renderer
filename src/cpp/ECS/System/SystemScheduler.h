@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SystemCallContext.h"
+#include "ECS/ECSAPI.h"
 #include "ECS/Time.h"
 
 class SystemExecutionGraph;
@@ -27,11 +28,11 @@ class SystemScheduler {
 public:
     SystemScheduler(ThreadPool& tp, LevelContext& level);
 
-    void runUpdateStage(UpdateStage & stage, const SystemInvokeParams& invokeParams = {});
+    ECSAPI void runUpdateStage(UpdateStage & stage, const SystemInvokeParams& invokeParams = {});
 
-    void runDeterministicUpdateStage(NodeResultsWriter& results, SystemExecutionGraph& executor);
+    ECSAPI void runDeterministicUpdateStage(NodeResultsWriter& results, SystemExecutionGraph& executor);
     
-    void runSerialUpdateStage(NodeResultsWriter& results, SystemExecutionGraph& executor);
+    ECSAPI void runSerialUpdateStage(NodeResultsWriter& results, SystemExecutionGraph& executor);
 
-    void runParallelUpdateStage(NodeResultsWriter& results, SystemExecutionGraph& executor);
+    ECSAPI void runParallelUpdateStage(NodeResultsWriter& results, SystemExecutionGraph& executor);
 };

@@ -4,6 +4,7 @@
 #include <Renderer/Resource/Geometry/GeometryKey.h>
 #include <Renderer/Resource/Shader/ShaderKey.h>
 #include <Renderer/Resource/Texture/TextureKey.h>
+#include "RendererAPI.h"
 
 struct Skybox {
     struct CubemapVertex {
@@ -54,7 +55,7 @@ struct GPUSkybox {
     int prefilterLOD;
 };
 
-struct SkyboxRenderer {
+struct RENDERERAPI SkyboxRenderer {
     GeometryKey cubemapGeometryKey;
     ShaderKey skyboxShader;
 

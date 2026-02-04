@@ -2,7 +2,7 @@
 #include <string>
 #include <gl/glew.h>
 #include <memory/byte_arena.h>
-#include <Util/glm_double.h>
+#include <GlmPrint.h>
 
 #include "ShaderDefinition.h"
 #include "ShaderReflection.h"

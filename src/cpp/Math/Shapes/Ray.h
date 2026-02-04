@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../MathAPI.h"
 #include <glm/geometric.hpp>
 #include <glm/vec3.hpp>
 
@@ -15,7 +15,7 @@ struct RayResult {
     }
 };
 
-class Ray {
+class MATHAPI Ray {
 public:
     glm::vec3 origin = glm::vec3(0);
     glm::vec3 direction = glm::vec3(0);

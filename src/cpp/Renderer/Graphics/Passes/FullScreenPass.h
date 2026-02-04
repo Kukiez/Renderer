@@ -4,8 +4,7 @@
 #include "Renderer/Resource/Texture/RenderTexture.h"
 #include "Renderer/Resource/Texture/TextureKey.h"
 
-
-class FullScreenPass : public IRenderPass {
+class RENDERERAPI FullScreenPass : public IRenderPass {
     RenderTexture outTexture;
     SamplerKey inTexture;
     Viewport vp{};

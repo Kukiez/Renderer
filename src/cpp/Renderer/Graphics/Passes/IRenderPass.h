@@ -5,7 +5,7 @@
 
 class ShaderProgram;
 
-class IRenderPass {
+class RENDERERAPI IRenderPass {
     std::string_view myName{};
 public:
     IRenderPass(const std::string_view name) : myName(name) {}
@@ -15,7 +15,7 @@ public:
     std::string_view name() const { return myName; }
 };
 
-class IGraphicsPass : public IRenderPass {
+class RENDERERAPI IGraphicsPass : public IRenderPass {
 protected:
     GraphicsAllocator* allocator{};
 
