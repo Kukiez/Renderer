@@ -8,7 +8,7 @@ using EnumerableConstructCallback = mem::function<void(void*, size_t), mem::smal
 
 struct SystemEnumerable {
     void* enumerable = nullptr;
-    const mem::type_info* type = mem::type_info_of<void>;
+    mem::typeindex type;
     size_t count = 0;
     EnumerableConstructCallback constructCallback{};
 
@@ -40,15 +40,15 @@ struct SystemEnumerable {
     }
 
     void* back() const {
-        return mem::offset(type, enumerable, count);
+        return type.index(enumerable, count);
     }
 
     void* get(const size_t idx) {
-        return mem::offset(type, enumerable, idx);
+        return type.index(enumerable, idx);
     }
 
     const void* get(const size_t idx) const {
-        return mem::offset(type, enumerable, idx);
+        return type.index(enumerable, idx);
     }
 };
 

@@ -94,7 +94,7 @@ public:
         return &self.findField(type);
     }
 
-    const mem::type_info * getTypeInfoOf(const TypeUUID type) const {
+    mem::typeindex getTypeInfoOf(const TypeUUID type) const {
         return findField(type).type;
     }
 

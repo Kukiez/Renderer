@@ -242,13 +242,13 @@ struct SystemStageDescriptor<Stage, System> {
     static constexpr auto ReadTypesCount = std::tuple_size_v<reads>;
 
     static constexpr auto WriteTypes = []<size_t... Is>(std::index_sequence<Is...>) {
-        return std::array<const mem::type_info*, WriteTypesCount>{
+        return std::array<mem::typeindex, WriteTypesCount>{
             mem::type_info_of<std::tuple_element_t<Is, writes>>...
         };
     }(std::make_index_sequence<std::tuple_size_v<writes>>{});
 
     static constexpr auto ReadTypes = []<size_t... Is>(std::index_sequence<Is...>) {
-        return std::array<const mem::type_info*, ReadTypesCount>{
+        return std::array<mem::typeindex, ReadTypesCount>{
             mem::type_info_of<std::tuple_element_t<Is, reads>>...
         };
     }(std::make_index_sequence<std::tuple_size_v<reads>>{});
@@ -323,13 +323,13 @@ struct SystemStageDescriptor<Stage, System> {
     static constexpr auto ReadTypesCount = std::tuple_size_v<reads>;
 
     static constexpr auto WriteTypes = []<size_t... Is>(std::index_sequence<Is...>) {
-        return std::array<const mem::type_info*, WriteTypesCount>{
+        return std::array<mem::typeindex, WriteTypesCount>{
             mem::type_info_of<std::tuple_element_t<Is, writes>>...
         };
     }(std::make_index_sequence<std::tuple_size_v<writes>>{});
 
     static constexpr auto ReadTypes = []<size_t... Is>(std::index_sequence<Is...>) {
-        return std::array<const mem::type_info*, ReadTypesCount>{
+        return std::array<mem::typeindex, ReadTypesCount>{
             mem::type_info_of<std::tuple_element_t<Is, reads>>...
         };
     }(std::make_index_sequence<std::tuple_size_v<reads>>{});

@@ -69,14 +69,6 @@ ShaderKey ShaderComponentType::createComputeShader(const ComputeShaderDescriptor
  *
  */
 
-void ShaderFactory::setNamedShader(ShaderComponentType *shaders, ShaderKey key, ComponentIndex name,
-    const mem::type_info *type)
-{
-    ComponentField<NamedShaderField> field;
-    field.type = type;
-    field.shader = key;
-}
-
 ShaderFactory::ShaderFactory(Renderer &renderer) : type(&renderer.getShaderStorage()) {}
 
 ShaderKey ShaderFactory::loadShader(const ShaderDescriptor &descriptor) const {

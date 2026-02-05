@@ -9,7 +9,7 @@ class SecondaryStagingBuffer {
     using Arena = mem::byte_arena<mem::same_alloc_schema, 64>;
 
     struct DataBuffer {
-        const mem::type_info* type = mem::type_info_of<void>;
+        mem::typeindex type = mem::type_info_of<void>;
         void* dataPtr = nullptr;
         size_t size = 0;
         size_t capacity = 0;
@@ -17,12 +17,12 @@ class SecondaryStagingBuffer {
 
         DataBuffer() = default;
 
-        DataBuffer(Arena& allocator, const mem::type_info* type)
+        DataBuffer(Arena& allocator, mem::typeindex type)
         : type(type), entities(&allocator) {}
 
         void release() {
             if (dataPtr) {
-                mem::destroy_at(type, dataPtr, size);
+                type.destroy(dataPtr, size);
                 size = 0;
                 capacity = 0;
                 dataPtr = nullptr;
@@ -40,7 +40,7 @@ class SecondaryStagingBuffer {
 
                 void* newMem = allocator.arena->allocate(TypeInfo, capacity * 2 + 8);
 
-                if (size != 0) mem::move(TypeInfo, newMem, dataPtr);
+                if (size != 0) TypeInfo.move(newMem, dataPtr);
 
                 dataPtr = newMem;
                 capacity = capacity * 2 + 8;

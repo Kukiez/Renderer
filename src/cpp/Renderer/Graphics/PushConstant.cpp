@@ -36,10 +36,11 @@ UniformParameterType PushConstantSet::push(const ShaderString &str, const void *
 PushConstantSet PushConstantSet::allocate(GraphicsAllocator *allocator, const ShaderProgram *shader) {
     struct alignas(16) char_align_16_t {};
 
+    size_t bytesReq = shader->definition().parameters().totalBytesUsed();
     return {
         shader,
-        allocator->allocateAligned<char>(
-            shader->definition().parameters().totalBytesUsed(), 16
+        (char*)allocator->allocate<char_align_16_t>(
+            bytesReq / 16 + (bytesReq % 16 != 0)
         )
     };
 }

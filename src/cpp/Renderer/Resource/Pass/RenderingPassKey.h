@@ -32,7 +32,7 @@ class RenderingPassType {
 
         template <IsRenderingPass Pass>
         TypeMetadata onCreateMetadata(TypeID typeID) {
-            nameToPassPending.emplace_back(mem::type_info_of<Pass>->name, typeID);
+            nameToPassPending.emplace_back(mem::type_info_of<Pass>.name(), typeID);
             return VTable::of<Pass>();
         }
 

@@ -194,7 +194,7 @@ GeometryKey GeometryFactory::loadGeometry(const GeometryDescriptor &descriptor) 
         } else if (iType.is<unsigned int>()) {
             indexType = IndexType::UINT32;
         } else {
-            assert(false);
+            std::unreachable();
         }
     }
     type->stagingBuffer.ops.local().createGeometry(key, v, i, vCount, iCount, vType, indexType, layout);

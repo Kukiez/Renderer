@@ -21,7 +21,7 @@ namespace mem {
     };
 
     template <typename Alloc>
-    concept IsDynamicAllocator = requires(Alloc alloc, const type_info* type, void* mem) {
+    concept IsDynamicAllocator = requires(Alloc alloc, typeindex type, void* mem) {
         { alloc.allocate(type, size_t(0)) } -> std::convertible_to<void*>;
         alloc.deallocate(type, mem, size_t(0));
         alloc.destroy(type, mem, size_t(0));
@@ -158,29 +158,29 @@ namespace mem {
     };
 
     struct dynamic_allocator {
-        void* allocate(const type_info* type, size_t count) {
-            return raw_alloc(type->size * count, type->align);
+        void* allocate(typeindex type, size_t count) {
+            return raw_alloc(type.size() * count, type.align());
         }
 
-        void deallocate(const type_info* type, void* mem, size_t count) {
-            raw_delete(mem, type->align);
+        void deallocate(typeindex type, void* mem, size_t count) {
+            raw_delete(mem, type.align());
         }
 
         template <typename T, typename... Args>
-        void construct(const type_info* type, void* mem, Args&&... args) {
+        void construct(typeindex type, void* mem, Args&&... args) {
             new (mem) T(std::forward<Args>(args)...);
         }
 
-        void destroy(const type_info* type, void* mem, size_t count) {
-            destroy_at(type, mem, count);
+        void destroy(typeindex type, void* mem, size_t count) {
+            type.destroy(mem, count);
         }
 
-        void copy_construct(const type_info* type, void* dst, const void* src, size_t count) {
-            copy(type, dst, src, count);
+        void copy_construct(typeindex type, void* dst, const void* src, size_t count) {
+            type.copy(dst, src, count);
         }
 
-        void move_construct(const type_info* type, void* dst, void* src, size_t count) {
-            move(type, dst, src, count);
+        void move_construct(typeindex type, void* dst, void* src, size_t count) {
+            type.move(dst, src, count);
         }
     };
 
@@ -195,17 +195,17 @@ namespace mem {
     struct small_buffer_dynamic_allocator : dynamic_allocator {
         alignas(Align) char buf[Size];
 
-        void* allocate(const type_info* type, size_t count) {
-            if (type->size <= Size && type->align <= Align) {
+        void* allocate(typeindex type, size_t count) {
+            if (type.size() <= Size && type.align() <= Align) {
                 return buf;
             } else {
-                return raw_alloc(type->size * count, type->align);                
+                return raw_alloc(type.size() * count, type.align());
             }
         }
 
-        void deallocate(const type_info* type, void* mem, size_t count) {
+        void deallocate(typeindex type, void* mem, size_t count) {
             if (mem != buf) {
-                raw_delete(mem, type->align);
+                raw_delete(mem, type.align());
             }
         }
     };

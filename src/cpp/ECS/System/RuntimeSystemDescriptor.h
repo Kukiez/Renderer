@@ -67,7 +67,7 @@ void invokeSystem(void* system, LevelContext& level, SystemCallContext& inout) {
 struct UpdateSystemDescriptor {
     TypeUUID selfType{};
 
-    const mem::type_info* self = nullptr;
+    mem::typeindex self = nullptr;
 
     UpdateFn update = nullptr;
 
@@ -75,8 +75,8 @@ struct UpdateSystemDescriptor {
     const TypeUUID* systemWrites = nullptr;
     const TypeUUID* systemDependencies = nullptr;
 
-    const mem::type_info* const* otherWrites = nullptr;
-    const mem::type_info* const* otherReads = nullptr;
+    const mem::typeindex* otherWrites = nullptr;
+    const mem::typeindex* otherReads = nullptr;
 
     uint16_t systemReadsCount = 0;
     uint16_t systemWritesCount = 0;
@@ -142,14 +142,14 @@ struct UpdateSystemDescriptor {
         return mem::make_range(systemDependencies, systemDependenciesCount);
     }
 
-    bool containsRead(const mem::type_info* type) const {
+    bool containsRead(mem::typeindex type) const {
         for (const auto& read : reads()) {
             if (read == type) return true;
         }
         return false;
     }
 
-    bool containsWrite(const mem::type_info* type) const {
+    bool containsWrite(mem::typeindex type) const {
         for (const auto& write : writes()) {
             if (write == type) return true;
         }
@@ -197,7 +197,7 @@ struct RuntimeStageDescriptor {
     SteadyTime hz = SteadyTime(0);
     StageExecutionModel executionModel;
     StageScheduleModel scheduleModel = StageScheduleModel::MANUAL;
-    const mem::type_info* type;
+    mem::typeindex type;
 
     OnStageBegin onStageBegin = nullptr;
     OnStageEnd onStageEnd = nullptr;
@@ -266,11 +266,11 @@ struct RuntimeSystemStageDescriptor {
     UpdateSystemDescriptor updateSystemDescriptor;
 
     const char* name() const {
-        return updateSystemDescriptor.self->name;
+        return updateSystemDescriptor.self.name();
     }
 
     size_t hash() const {
-        return updateSystemDescriptor.self->hash;
+        return updateSystemDescriptor.self.hash();
     }
 
     bool isUpdateSystem() const {
@@ -288,7 +288,7 @@ struct RuntimeSystemDescriptor {
     RuntimeSystemStageDescriptor* stagesPtr = nullptr;
     size_t stageCount = 0;
 
-    const mem::type_info* type = mem::type_info_of<NullSystem>;
+    mem::typeindex type = mem::type_info_of<NullSystem>;
 
     unsigned id{};
 
@@ -299,11 +299,11 @@ struct RuntimeSystemDescriptor {
     }
 
     const char* name() const {
-        return type->name;
+        return type.name();
     }
 
     size_t hash() const {
-        return type->hash;
+        return type.hash();
     }
 
     static auto& Null() {

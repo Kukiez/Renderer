@@ -7,20 +7,20 @@
 
 struct ThreadFrameLocalChunk {
     struct AllocationHeader {
-        const mem::type_info* type;
+        mem::typeindex type;
         void* begin;
         size_t len;
     };
     mem::byte_arena<> arena = mem::create_byte_arena(mem::megabyte(0.1).bytes());
     mem::vector<AllocationHeader> allocations;
 
-    void* allocate(const mem::type_info* type, size_t count) {
+    void* allocate(mem::typeindex type, size_t count) {
         void* allocation = arena.allocate(type, count);
-        if (type->is_trivially_destructible()) return allocation;
+        if (type.is_trivially_destructible()) return allocation;
         return allocations.emplace_back(type, allocation, count).begin;
     }
 
-    void* allocateUnmanaged(const mem::type_info* type, size_t count) {
+    void* allocateUnmanaged(mem::typeindex type, size_t count) {
         return arena.allocate(type, count);
     }
 
@@ -43,7 +43,7 @@ struct ThreadFrameLocalChunk {
 
     void reset() {
         for (auto& [type, ptr, len] : allocations) {
-            mem::destroy_at(type, ptr, len);
+            type.destroy(ptr, len);
         }
         arena.reset_compact();
         allocations.clear();
@@ -51,7 +51,7 @@ struct ThreadFrameLocalChunk {
 
     void destroy() {
         for (auto& [type, ptr, len] : allocations) {
-            mem::destroy_at(type, ptr, len);
+            type.destroy(ptr, len);
         }
         arena.destroy();
         allocations.zero_out();
@@ -69,7 +69,7 @@ class FrameAllocator {
 public:
     FrameAllocator() = default;
 
-    void* allocate(const mem::type_info* type, size_t count) {
+    void* allocate(mem::typeindex type, size_t count) {
         return threads.local().allocate(type, count);
     }
 
@@ -84,7 +84,7 @@ public:
         return static_cast<T*>(new (ptr) T(std::forward<Args>(args)...));
     }
 
-    void* allocateUnmanaged(const mem::type_info* type, const size_t count) {
+    void* allocateUnmanaged(mem::typeindex type, const size_t count) {
         return threads.local().allocateUnmanaged(type, count);
     }
 

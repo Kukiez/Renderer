@@ -49,7 +49,7 @@ SystemProfileReport SystemRegistry::getProfileReport(const RuntimeSystemDescript
 
         auto result = updateStage.getReadSystemResults()[system.localID];
 
-        stageReports.emplace_back(stage->type->name, result.slowestExecution,
+        stageReports.emplace_back(stage->type.name(), result.slowestExecution,
             result.averageExecution, result.fastestExecution,
             result.totalExecutions
         );
@@ -61,7 +61,7 @@ bool SystemRegistry::doSystemDependenciesExist(UpdateSystemDescriptor& descripto
     auto ensureExists = [&](auto dependencies) {
         for (auto dependency : dependencies) {
             if (!systemKindRegistry.has(dependency)) {
-                std::cout << "Dependency Not Found: " << systemKindRegistry.getFieldOf(dependency).type->name << std::endl;
+                std::cout << "Dependency Not Found: " << systemKindRegistry.getFieldOf(dependency).type.name() << std::endl;
                 return false;
             }
         }
@@ -95,9 +95,9 @@ SystemErrorStack SystemRegistry::createExecutionGraph(StageEntry& stageEntry) {
         }
     }
 
-    std::cout << "Stage: " << updStage.stage->type->name << "\n";
+    std::cout << "Stage: " << updStage.stage->type.name() << "\n";
     for (auto& system : updStage.systems()) {
-        std::cout << "> System: " << systemKindRegistry.getFieldOf(system.descriptor->selfType).type->name << "\n";
+        std::cout << "> System: " << systemKindRegistry.getFieldOf(system.descriptor->selfType).type.name() << "\n";
     }
     stageEntry.initialize();
 
@@ -137,7 +137,7 @@ void SystemRegistry::createExecutionGraphs() {
     std::cout << "All Stages: \n";
 
     for (auto& stage : stages) {
-        std::cout << stage->stage->type->name << "\n";
+        std::cout << stage->stage->type.name() << "\n";
     }
     std::cout << "\n------------------\n\n";
     std::cout << "graph TD\n";
@@ -201,7 +201,7 @@ std::ostream& operator<<(std::ostream& stream, const StageProfileReport& report)
     if (!report.stage) return stream;
 
     stream << "|--------------------------------------\n"
-           << "| Stage Profile: " << report.stage->stage->type->name << "\n"
+           << "| Stage Profile: " << report.stage->stage->type.name() << "\n"
            << "|--------------------------------------\n";
     stream << "  |- Systems Registered: " << report.stage->systems().size() << "\n";
     stream << "  |- Execution Model: "   << report.stage->stage->executionModel << "\n";

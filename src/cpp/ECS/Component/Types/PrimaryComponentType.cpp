@@ -248,7 +248,7 @@ void PrimaryComponentType::dumpArchetypes() {
         std::cout << "  Entities: " << entities << "\n";
         std::cout << "  Components: [ \n   ";
         for (auto type : archetype.getTypeIterator()) {
-            std::cout << componentRegistry.getTypeInfoOf(type)->name << ", ";
+            std::cout << componentRegistry.getTypeInfoOf(type).name() << ", ";
         }
         std::cout << "\n  ],\n";
     }
@@ -307,7 +307,7 @@ void EntityCreateOps::reset() {
                 void* data = cmd->data[i];
                 const TypeUUID type = types[i];
                 const auto typeInfo = componentRegistry->getTypeInfoOf(type);
-                mem::destroy_at(typeInfo, data, cmd->size);
+                typeInfo.destroy(data, cmd->size);
             }
         }
         commands.release();

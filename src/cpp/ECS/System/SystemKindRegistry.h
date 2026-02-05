@@ -67,7 +67,7 @@ public:
                 i = 1;
                 continue;
             }
-            mem::destroy_at(field.descriptor->type, field.instance, 1);
+            field.descriptor->type.destroy(field.instance, 1);
 
             for (auto& [stage, system] : field.descriptor->stages()) {
                 system.~UpdateSystemDescriptor();

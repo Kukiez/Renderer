@@ -60,7 +60,7 @@ struct StageEntry {
         }
     }
 
-    SystemEnumerable* getEnumerable(const mem::type_info* enumerableType) {
+    SystemEnumerable* getEnumerable(mem::typeindex enumerableType) {
         for (auto& enumerable : systemLocalData) {
             if (enumerable.type == enumerableType) {
                 return &enumerable;

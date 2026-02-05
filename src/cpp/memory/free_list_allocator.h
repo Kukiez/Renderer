@@ -116,7 +116,7 @@ namespace mem {
             return *this;
         }
 
-        char* allocate(const type_info* type, const size_t count) {
+        char* allocate(typeindex type, const size_t count) {
             const size_t bytesRequired = padding(count, alignment);
             auto result = freeBlocks.find(bytesRequired);
             return result.count ? memory + result.begin : nullptr;
@@ -177,13 +177,13 @@ namespace mem {
             allocators.emplace_back(allocate_memory(capacity), capacity, alignment);
         }
 
-        char* allocate(const type_info* type, const size_t count) {
+        char* allocate(typeindex type, const size_t count) {
             for (int i = (int)allocators.size() - 1; i != 0; --i) {
                 if (auto result = allocators[i].allocate(type, count); result) {
                     return result;
                 }
             }
-            size_t newCapacity = allocators.empty() ? type->size * count : std::max(type->size * count, allocators.back().get_capacity() * 2);
+            size_t newCapacity = allocators.empty() ? type.size() * count : std::max(type.size() * count, allocators.back().get_capacity() * 2);
             allocators.emplace_back(allocate_memory(newCapacity), newCapacity, alignment);
             return allocators.back().allocate(type, count);
         }
@@ -202,8 +202,8 @@ namespace mem {
             return false;
         }
 
-        bool deallocate(const type_info* type, void* start, const size_t count) {
-            return deallocate(start, count * type->size);
+        bool deallocate(typeindex type, void* start, const size_t count) {
+            return deallocate(start, count * type.size());
         }
 
         void destroy_adjacent() {

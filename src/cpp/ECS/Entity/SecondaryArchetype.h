@@ -52,7 +52,7 @@ class SecondaryArchetype {
     using Metadata = EntityMetadataStorage<SecondaryEntityMetadata>;
     using Arena = mem::byte_arena<mem::same_alloc_schema, 64>;
 
-    const mem::type_info* type = mem::type_info_of<void>;
+    mem::typeindex type = mem::type_info_of<void>;
 
     struct Chunk {
         char* buffer = nullptr;
@@ -84,7 +84,7 @@ public:
 
     ~SecondaryArchetype();
 
-    static SecondaryArchetype create(TypeUUID typeID, const mem::type_info* type);
+    static SecondaryArchetype create(TypeUUID typeID, mem::typeindex type);
 
     ByteBufferIndex reserve(size_t count);
 

@@ -169,7 +169,7 @@ namespace mem {
                 reallocate(cap);
             }
             void* emplaceIdx = offset(*Members::get_type(), Members::get_data(), Members::get_size()++);
-            forwardFn(*Members::get_type(), emplaceIdx, data, elements);
+            (Members::get_type()->*forwardFn)(emplaceIdx, data, elements);
             return emplaceIdx;
         }
     public:
@@ -199,11 +199,11 @@ namespace mem {
         ~basic_any_vector() requires (!IsOwning) = default;
 
         void* move_emplace_back(void* data, const size_t elements = 1) {
-            return emplace_back_impl(data, elements, move);
+            return emplace_back_impl(data, elements, typeindex::move);
         }
 
         void* copy_emplace_back(const void* data, const size_t elements = 1) {
-            return emplace_back_impl(const_cast<void*>(data), elements, copy);
+            return emplace_back_impl(const_cast<void*>(data), elements, typeindex::copy);
         }
 
         template <typename ForwardFn>

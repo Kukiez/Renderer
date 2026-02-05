@@ -11,7 +11,7 @@
 #include "Resource/Material/MaterialStorage.h"
 
 struct AllocationRecord {
-    mem::type_info type;
+    mem::typeindex type;
     size_t count;
 };
 
@@ -19,7 +19,7 @@ static tbb::enumerable_thread_specific<std::vector<AllocationRecord>> records;
 
 void * FrameScopedGraphicsAllocator::allocate(mem::typeindex type, size_t count) {
     void* mem = allocators.local().arena.allocate(type, count);
-    records.local().emplace_back(**type, count);
+    records.local().emplace_back(type, count);
     return mem;
 }
 
@@ -35,7 +35,7 @@ void FrameScopedGraphicsAllocator::reset() {
 
         for (auto& record : rcds) {
         //    std::cout << "Allocation : " << record.type.name << ": " << record.count << ", Bytes: " << record.type.size * record.count << std::endl;
-            total += record.type.size * record.count;
+            total += record.type.size() * record.count;
         }
         rcds.clear();
     }

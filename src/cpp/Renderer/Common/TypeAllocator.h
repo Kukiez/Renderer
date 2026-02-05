@@ -40,11 +40,11 @@ struct TypeAllocatorArray {
         if (allocator.isFull()) {
             return nullptr;
         }
-        return mem::offset(type, allocator.ptr, allocator.size++);
+        return type.index(allocator.ptr, allocator.size++);
     }
 
     void free(void* ptr) {
-        mem::destroy_at(type, ptr);
+        type.destroy(ptr, 1);
         freeIndices.push_back(ptr);
     }
 };

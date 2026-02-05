@@ -62,7 +62,7 @@ public:
     struct TypeIndex {
         ArchetypeChunk chunks[MAX_STORAGES]{};
         TypeUUID type{};
-        const mem::type_info* typeInfo = mem::type_info_of<void>;
+        mem::typeindex typeInfo = mem::type_info_of<void>;
         mem::bitset<mem::byte_arena_adaptor<size_t, Arena>> changes[MAX_STORAGES]{};
         bool enableChanges = false;
         bool allBitsSet = false;

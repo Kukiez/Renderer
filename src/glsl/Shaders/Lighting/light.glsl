@@ -1,5 +1,6 @@
-#include "../aabb.glsl"
+#include "../common/aabb.glsl"
 #include "../common/global_transforms.glsl"
+#include "ibl.glsl"
 
 const int LIGHT_TYPE_INVALID     = 0;
 const int LIGHT_TYPE_POINT       = 1;

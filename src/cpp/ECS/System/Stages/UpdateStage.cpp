@@ -225,7 +225,7 @@ void UpdateStage::dumpMermaid(const SystemKindRegistry& registry) {
         const auto from = registry.getFieldOf(node.systemID).descriptor->name();
 
         if (node.outEdges().empty()) {
-            std::cout << "    " << node.systemID << "[" << from << "] " << " --> " << endMarker << "[" << this->stage->type->name << "]\n";
+            std::cout << "    " << node.systemID << "[" << from << "] " << " --> " << endMarker << "[" << this->stage->type.name() << "]\n";
         }
         for (const int toID : node.outEdges()) {
             const auto toGraphIdx = executor.nodes[toID].systemID;

@@ -108,8 +108,8 @@ void Archetype::expandAllocator(const ByteBufferIndex bufferIndex, const DataInd
         char*& oldPtr = typeIndex.chunks[bufferIndex].buffer;
 
         const auto type = typeIndex.typeInfo;
-        mem::move(type, newPtr, oldPtr, size);
-        mem::destroy_at(type, oldPtr, size);
+        type.move(newPtr, oldPtr, size);
+        type.destroy(oldPtr, size);
 
         oldPtr = newPtr;
     }
@@ -201,9 +201,7 @@ void * Archetype::getAt(const EntityLocation &loc, const TypeUUID typeID, size_t
     if (!type) return nullptr;
     hint = type - storage.typeIndices;
 
-    return mem::offset(type->typeInfo,
-                       type->chunks[loc.byteBuffer].data(), loc.dataIndex
-    );
+    return type->typeInfo.index(type->chunks[loc.byteBuffer].data(), loc.dataIndex);
 }
 
 void * Archetype::getAtTracked(const EntityLocation &loc, const TypeUUID typeID, size_t &hint) {
@@ -214,8 +212,7 @@ void * Archetype::getAtTracked(const EntityLocation &loc, const TypeUUID typeID,
 
     type->changes[loc.byteBuffer].set(loc.dataIndex);
 
-    return mem::offset(type->typeInfo,
-                       type->chunks[loc.byteBuffer].data(), loc.dataIndex);
+    return type->typeInfo.index(type->chunks[loc.byteBuffer].data(), loc.dataIndex);
 }
 
 void * Archetype::getAtTracked(const EntityLocation &loc, const TypeUUID typeID) {
@@ -229,8 +226,8 @@ void Archetype::initializeEntity(const EntityLocation& location, EntityTypeDataI
         auto& typeInfo = typeIndex.typeInfo;
         auto& chunk = typeIndex.chunks[location.byteBuffer];
 
-        mem::move(typeInfo,
-            mem::offset(typeInfo, chunk.data(), location.dataIndex), data
+        typeInfo.move(
+            typeInfo.index(chunk.data(), location.dataIndex), data
         );
 
         if (typeIndex.enableChanges) {
@@ -247,13 +244,13 @@ void Archetype::eraseEntity(const Entity& e, const EntityLocation& loc) {
         const auto& type = typeIndex.typeInfo;
         char* buffer = typeIndex.chunks[loc.byteBuffer].data();
 
-        void* source = mem::offset(type, buffer, lastEntityIdx);
+        void* source = type.index(buffer, lastEntityIdx);
         if (lastEntityIdx == loc.dataIndex) {
-            mem::destroy_at(type, source, 1);
+            type.destroy(source, 1);
         } else {
-            void* dest = mem::offset(type, buffer, loc.dataIndex);
-            mem::move(type, dest, source);
-            mem::destroy_at(type, source, 1);
+            void* dest = type.index(buffer, loc.dataIndex);
+            type.move(dest, source);
+            type.destroy(source, 1);
         }
 
         if (typeIndex.enableChanges) {
@@ -313,7 +310,7 @@ Archetype::~Archetype() {
         auto& typeInfo = typeIndex.typeInfo;
 
         for (int j = 0; j < MAX_STORAGES; ++j) {
-            mem::destroy_at(typeInfo, typeIndex.chunks[j].data(), storage.sizes[j]);
+            typeInfo.destroy(typeIndex.chunks[j].data(), storage.sizes[j]);
         }
     }
     delete[] storage.typeIndices;
@@ -326,8 +323,8 @@ void Archetype::overwriteEntity(const EntityLocation& loc, EntityTypeDataIterato
         auto typeInfo = typeIndex.typeInfo;
 
         auto& buffer = typeIndex.chunks[loc.byteBuffer];
-        void* oldData = mem::offset(typeInfo, buffer.data(), loc.dataIndex);
-        mem::move(typeInfo, oldData, newData);
+        void* oldData = typeInfo.index(buffer.data(), loc.dataIndex);
+        typeInfo.move(oldData, newData);
         lastType = &typeIndex - storage.typeIndices;
 
         if (typeIndex.enableChanges) {
@@ -349,14 +346,12 @@ void Archetype::addEntities(const Entity* entities, const DataIndex count, void*
         TypeIndex& typeIndex = storage.typeIndices[i];
         const auto& typeInfo = typeIndex.typeInfo;
 
-        void* dst = mem::offset(typeInfo, typeIndex.chunks[loc.byteBuffer].data(), loc.dataIndex);
-        mem::move(typeInfo, dst, data[i], count);
+        void* dst = typeInfo.index(typeIndex.chunks[loc.byteBuffer].data(), loc.dataIndex);
+        typeInfo.move(dst, data[i], count);
 
         if (typeIndex.enableChanges) {
             typeIndex.changes[loc.byteBuffer].set_range(loc.dataIndex, loc.dataIndex + count);
         }
-
-        std::cout << "Writing at Address: " << dst << ": [" << typeInfo->name << "], bytes: " << typeInfo->size * count << std::endl;
     }
     Entity* ptr = &storage.entities[loc.byteBuffer][loc.dataIndex];
     std::memcpy(ptr, entities, sizeof(Entity) * count);
@@ -377,12 +372,12 @@ void Archetype::removeEntity(Archetype& dst, const Entity& e) {
         const auto type = typeIndex.typeInfo;
 
         auto& buffer = typeIndex.chunks[prevLoc.byteBuffer];
-        void* data = mem::offset(type, buffer.data(), prevLoc.dataIndex);
+        void* data = type.index(buffer.data(), prevLoc.dataIndex);
 
         const TypeIndex& dstTypeIndex = dst.storage.typeIndices[i];
         auto& dstBuffer = dstTypeIndex.chunks[newLoc.byteBuffer];
-        mem::move(type,
-            mem::offset(type, dstBuffer.data(), newLoc.dataIndex), data
+        type.move(
+            type.index(dstBuffer.data(), newLoc.dataIndex), data
         );
 
         if (typeIndex.enableChanges) {
@@ -410,12 +405,12 @@ void Archetype::moveEntity(Archetype& dst, const Entity& e, EntityTypeDataIterat
         auto typeInfo = typeIndex.typeInfo;
         auto& buffer = typeIndex.chunks[prevLoc.byteBuffer];
 
-        void* data = mem::offset(typeInfo, buffer.data(), prevLoc.dataIndex);
+        void* data = typeInfo.index(buffer.data(), prevLoc.dataIndex);
 
         TypeIndex& dstTypeIndex = dst.findTypeIndex(type, lastTypeIndex);
         auto& dstBuffer = dstTypeIndex.chunks[newLoc.byteBuffer];
-        mem::move(typeInfo,
-            mem::offset(typeInfo, dstBuffer.data(), newLoc.dataIndex), data
+        typeInfo.move(
+            typeInfo.index(dstBuffer.data(), newLoc.dataIndex), data
         );
         lastTypeIndex = &typeIndex - storage.typeIndices;
 
@@ -467,7 +462,7 @@ void Archetype::reset() {
             auto& typeIndex = storage.typeIndices[j];
             auto& chunk = typeIndex.chunks[i];
             auto& typeInfo = typeIndex.typeInfo;
-            mem::destroy_at(typeInfo, chunk.data(), size);
+            typeInfo.destroy(chunk.data(), size);
         }
         storage.sizes[i] = 0;
         storage.capacities[i] = 0;
@@ -732,8 +727,8 @@ void SecondaryArchetype::expandChunk(Chunk &chunk, const size_t withCapacity) co
     auto* newBuffer = static_cast<char*>(newAllocator.allocate(type, withCapacity));
 
     memcpy(newEntities, chunk.entities, chunk.size * sizeof(Entity));
-    mem::move(type, newBuffer, chunk.buffer, chunk.size);
-    mem::destroy_at(type, chunk.buffer, chunk.size);
+    type.move(newBuffer, chunk.buffer, chunk.size);
+    type.destroy(chunk.buffer, chunk.size);
 
     chunk.allocator = std::move(newAllocator);
     chunk.entities = newEntities;
@@ -747,7 +742,7 @@ std::tuple<ByteBufferIndex, void *, Entity *> SecondaryArchetype::nextFree(const
 
         if (size + forEntities <= capacity) {
             lastAvailableSpot = i;
-            return std::make_tuple(i, mem::offset(type, buffer, size), entities + size);
+            return std::make_tuple(i, type.index(buffer, size), entities + size);
         }
     }
     return std::make_tuple(static_cast<ByteBufferIndex>(chunks.size()), nullptr, nullptr);
@@ -783,11 +778,11 @@ SecondaryArchetype & SecondaryArchetype::operator=(SecondaryArchetype &&other) n
 
 SecondaryArchetype::~SecondaryArchetype() {
     for (const auto& chunk : chunks) {
-        if (chunk.size > 0) mem::destroy_at(type, chunk.buffer, chunk.size);
+        if (chunk.size > 0) type.destroy(chunk.buffer, chunk.size);
     }
 }
 
-SecondaryArchetype SecondaryArchetype::create(const TypeUUID typeID, const mem::type_info *type) {
+SecondaryArchetype SecondaryArchetype::create(const TypeUUID typeID, mem::typeindex type) {
     SecondaryArchetype arch;
     arch.type = type;
     arch.typeID = typeID;
@@ -821,14 +816,14 @@ std::pair<ByteBufferIndex, void *> SecondaryArchetype::add(const Entity *entitie
         } else {
             buffer = expands % 10;
             expandChunk(chunks[buffer], newCapacity);
-            dataPtr = mem::offset(type, chunks[buffer].buffer, chunks[buffer].size);
+            dataPtr = type.index(chunks[buffer].buffer, chunks[buffer].size);
             entityPtr = chunks[buffer].entities + chunks[buffer].size;
         }
         ++expands;
     }
 
     memcpy(entityPtr, entities, count * sizeof(Entity));
-    mem::move(type, dataPtr, data, count);
+    type.move(dataPtr, data, count);
     chunks[buffer].size += count;
 
     return std::make_pair(buffer, dataPtr);
@@ -838,19 +833,19 @@ void SecondaryArchetype::construct(const Entity &entity, void *data, const ByteB
     auto& [buffer, entities, allocator, size, capacity] = chunks[index];
 
     memcpy(entities + size, &entity, sizeof(Entity));
-    mem::move(type, buffer, data, 1);
+    type.move(buffer, data, 1);
     ++size;
 }
 
 void SecondaryArchetype::remove(Metadata &metadata, const SecondaryEntityLocation &location) {
     auto& [buffer, entities, allocator, size, capacity] = chunks[location.bufferIndex];
 
-    void* lastOffset = mem::offset(type, buffer, size - 1);
-    mem::destroy_at(type, location.data, 1);
+    void* lastOffset = type.index(buffer, size - 1);
+    type.destroy(location.data, 1);
 
     if (lastOffset != location.data) {
-        mem::move(type, location.data, lastOffset);
-        mem::destroy_at(type, lastOffset);
+        type.move(location.data, lastOffset);
+        type.destroy(lastOffset);
 
         auto& swappedEntity = metadata[entities[size - 1]];
         auto& swappedLocation = swappedEntity.findUnchecked(typeID);
@@ -867,7 +862,7 @@ void SecondaryArchetype::reset() {
 
     for (size_t i = 0; i < chunks.size(); ++i) {
         auto& [buffer, entities, allocator, size, capacity] = chunks[i];
-        mem::destroy_at(type, buffer, size);
+        type.destroy(buffer, size);
         size = 0;
 
         if (capacity > bestCapacity) {
@@ -895,11 +890,11 @@ void SparseComponentStorage::add(const Entity *entities, const TypeUUID type, vo
         auto& entity = entities[i];
         auto& location = findOrCreateLocation(entity, type);
         if (location.data) {
-            mem::move(typeInfo, location.data,
-                  mem::offset(typeInfo, data, i)
+            typeInfo.move(location.data,
+                  typeInfo.index(data, i)
             );
         } else {
-            void* loc = mem::offset(typeInfo, data, i);
+            void* loc = typeInfo.index(data, i);
             archetype.construct(entity, loc, index);
             location.data = loc;
             location.bufferIndex = index;

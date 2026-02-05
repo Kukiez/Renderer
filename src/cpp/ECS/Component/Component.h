@@ -22,7 +22,7 @@ concept FieldConstructibleFrom = requires(Args... args)
 
 template <typename Field>
 struct ComponentField : Field {
-    const mem::type_info* type{};
+    mem::typeindex type{};
 
     ComponentField() : type(mem::type_info_of<void>) {}
 
@@ -37,7 +37,7 @@ struct ComponentField : Field {
     }
 
     size_t hash() const {
-        return type->hash;
+        return type.hash();
     }
 };
 

@@ -26,7 +26,7 @@ bool SystemInfo::isInStage(const TypeUUID stage) const {
 }
 
 std::string_view SystemInfo::name() const {
-    return registry.getSystemKindRegistry().getFieldOf(system).type->name;
+    return registry.getSystemKindRegistry().getFieldOf(system).type.name();
 }
 
 bool AbstractStageReference::invoke(Level &level, const TypeUUID system, const SystemInvokeParams invokeParams) const {
@@ -61,11 +61,11 @@ bool AbstractStageReference::hasSystem(TypeUUID system) const {
 }
 
 std::string_view StageInfo::name() const {
-    return registry.getStageKindRegistry().getFieldOf(stage).type->name;
+    return registry.getStageKindRegistry().getFieldOf(stage).type.name();
 }
 
 size_t StageInfo::hash() const {
-    return registry.getStageKindRegistry().getFieldOf(stage).type->hash;
+    return registry.getStageKindRegistry().getFieldOf(stage).type.hash();
 }
 
 SystemEnumerable * AbstractStageReference::getEnumerableImpl(const mem::type_info *enumType) const {

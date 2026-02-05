@@ -6,10 +6,10 @@
 
 namespace mem {
     struct type_erased_allocator {
-        const mem::type_info* type;
+        mem::typeindex type;
 
         char* allocate(const size_t count) {
-            return new char[type->size * count];
+            return new char[type.size() * count];
         }
 
         void deallocate(char* ptr, size_t) {
@@ -22,11 +22,11 @@ namespace mem {
         }
 
         void construct_typeless(void* dst, void* src) {
-            memcpy(dst, src, type->size);
+            memcpy(dst, src, type.size());
         }
 
         void destroy(void* buf, size_t count) {
-            mem::destroy_at(type, buf, count);
+            type.destroy(buf, count);
         }
     };
 

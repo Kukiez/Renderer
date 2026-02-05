@@ -1,5 +1,4 @@
 #include "light.glsl"
-#include "ibl.glsl"
 
 const float PI = 3.14f;
 

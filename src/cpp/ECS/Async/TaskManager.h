@@ -26,7 +26,7 @@ struct TaskManager {
     template <typename T>
     void destroyTask(Task<T>* task) {
         auto header = task->getLambdaHeader();
-        mem::destroy_at(header.type, header.inst);
+        header.type.destroy(header.inst);
         taskAllocator->deallocate(header.inst, header.type->size);
 
         task->~Task<T>();

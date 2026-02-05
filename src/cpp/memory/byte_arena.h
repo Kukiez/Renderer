@@ -19,10 +19,10 @@ namespace mem {
             return bytes;
         }
 
-        constexpr void include(const type_info* type, size_t count) {
+        constexpr void include(const typeindex type, size_t count) {
             size_t offsetRequired = mem::padding(type, bytes);
             bytes += offsetRequired;
-            bytes += type->size * count;
+            bytes += type.size() * count;
         }
 
         constexpr void include(size_t forBytes, size_t align) {
@@ -57,7 +57,7 @@ namespace mem {
             operator delete(memory, std::align_val_t{BaseAlign});
         }
 
-        static char* allocate(const size_t capacity) {
+        static char* allocate_mem(const size_t capacity) {
             return static_cast<char*>(operator new(capacity, std::align_val_t{BaseAlign}));
         }
 
@@ -76,7 +76,7 @@ namespace mem {
 
         template <typename T>
         requires requires (T t) { static_cast<size_t>(t); }
-        explicit byte_arena(T capacity) : memory(allocate(static_cast<size_t>(capacity))), capacity_(static_cast<size_t>(capacity)) {}
+        explicit byte_arena(T capacity) : memory(allocate_mem(static_cast<size_t>(capacity))), capacity_(static_cast<size_t>(capacity)) {}
         
         byte_arena(const byte_arena&) = delete;
         byte_arena& operator=(const byte_arena&) = delete;
@@ -109,40 +109,37 @@ namespace mem {
             deallocate();
             delete nextArena;
         }
-
-        void* allocate(const size_t bytes, const size_t alignment) {
-            type_info type;
-            type.align = alignment;
-            type.size = bytes;
-            return allocate(&type, 1);
-        }
         
-        void* allocate(const type_info* type, const size_t count) {
+        void* allocate(size_t capacity, const size_t alignment) {
             byte_arena* self = this;
 
             if (!self->memory) [[unlikely]] {
-                self->initialize(type, count);
-                self->next += type->size * count;
+                self->initialize(capacity);
+                self->next += capacity;
                 return self->memory;
             }
 
             while (self) {
-                const size_t offsetRequired = padding(type, self->next);
-                const size_t typeBytes = type->size * count;
+                const size_t offsetRequired = padding(self->next, alignment);
+                const size_t typeBytes = capacity;
 
                 char* mem = self->memory + self->next + offsetRequired;
 
                 if (mem + typeBytes > self->memory + self->capacity_) [[unlikely]] {
                     if (!self->nextArena) {
-                        self->nextArena = new byte_arena(self->reallocSchema.grow(self->capacity_, count * type->size));
+                        self->nextArena = new byte_arena(self->reallocSchema.grow(self->capacity_, capacity));
                     }
                     self = self->nextArena;
                     continue;
                 }
-                self->next += offsetRequired + type->size * count;
+                self->next += offsetRequired + capacity;
                 return mem;
             }
             std::unreachable();
+        }
+
+        void* allocate(const typeindex type, size_t count) {
+            return allocate(type.size() * count, type.align());
         }
 
         template <typename T>
@@ -152,33 +149,33 @@ namespace mem {
 
         void initialize(const size_t bytes) {
             deallocate();
-            memory = allocate(bytes);
+            memory = allocate_mem(bytes);
             capacity_ = bytes;
         }
 
         void initialize(const bytes_required bytes) {
             deallocate();
-            memory = allocate(bytes.get());
+            memory = allocate_mem(bytes.get());
             capacity_ = bytes.get();
         }
 
-        void initialize(const type_info* type, size_t count) {
+        void initialize(typeindex type, size_t count) {
             deallocate();
-            memory = allocate(type->size * count);
-            capacity_ = type->size * count;
+            memory = allocate_mem(type.size() * count);
+            capacity_ = type.size() * count;
         }
         
         bool is_initialized() const {
             return memory != nullptr;
         }
 
-        void* allocate_or_fail(const type_info* type, size_t count) {
+        void* allocate_or_fail(typeindex type, size_t count) {
             const size_t offsetRequired = padding(type, next);
-            const size_t typeBytes = type->size * count;
+            const size_t typeBytes = type.size() * count;
 
             if (!memory) {
                 initialize(type, count);
-                next += offsetRequired + type->size * count;
+                next += offsetRequired + type.size() * count;
                 return memory;
             }
             char* mem = memory + next + offsetRequired;
@@ -186,7 +183,7 @@ namespace mem {
             if (mem + typeBytes > memory + capacity_) [[unlikely]] {
                 return nullptr;
             }
-            next += offsetRequired + type->size * count;
+            next += offsetRequired + type.size() * count;
             return mem;
         }
 
@@ -250,22 +247,9 @@ namespace mem {
                 totalCapacity += capacity_;
                 deallocate();
                 destroy_adjacent();
-                memory = allocate(totalCapacity);
+                memory = allocate_mem(totalCapacity);
             }
             next = 0;
-        }
-
-        void* copy_all_memory_to(void* dst, const mem::type_info* type) {
-            auto arena = this;
-
-            char* dstChar = static_cast<char*>(dst);
-
-            while (arena) {
-                mem::copy(type, dstChar, arena->memory, arena->next / type->size);
-                dstChar += arena->capacity_;
-                arena = arena->nextArena;
-            }
-            return dstChar;
         }
 
         /**
@@ -289,8 +273,8 @@ namespace mem {
             nextArena = nullptr;
         }
 
-        bool has_for(const mem::type_info* type, const size_t count) const {
-            const bool has = next + type->size * count <= capacity_;
+        bool has_for(typeindex type, const size_t count) const {
+            const bool has = next + type.size() * count <= capacity_;
 
             if (has) return true;
 
@@ -350,7 +334,7 @@ namespace mem {
 
     class allocation_wrapper {
         void* mem = nullptr;
-        const mem::type_info* type;
+        typeindex type;
     };
 
     template <
@@ -412,12 +396,12 @@ namespace mem {
         }
 
         template <typename T, typename... Args>
-        void construct(const type_info* type, void* mem, Args&&... args) {
+        void construct(typeindex type, void* mem, Args&&... args) {
             new (mem) T(std::forward<Args>(args)...);
         }
 
-        void destroy(const type_info* type, void* mem, size_t count) {
-            destroy_at(type, mem, count);
+        void destroy(typeindex type, void* mem, size_t count) {
+            type.destroy(mem, count);
         }
 
         T* allocate(const size_t count) {
@@ -430,24 +414,24 @@ namespace mem {
 
         }
 
-        void deallocate(const type_info* type, void* mem, size_t count) {
+        void deallocate(typeindex type, void* mem, size_t count) {
         }
 
         T* shrink_alloc(T* ptr, size_t, size_t) {
             return ptr;
         }
 
-        void* allocate(const type_info* type, size_t count) {
+        void* allocate(typeindex type, size_t count) {
             return arena->allocate(type, count);
         }
 
 
-        void copy_construct(const type_info* type, void* dst, const void* src, size_t count) {
-            copy(type, dst, src, count);
+        void copy_construct(typeindex type, void* dst, const void* src, size_t count) {
+            type.copy(dst, src, count);
         }
 
-        void move_construct(const type_info* type, void* dst, void* src, size_t count) {
-            move(type, dst, src, count);
+        void move_construct(typeindex type, void* dst, void* src, size_t count) {
+            type.move(dst, src, count);
         }
     };
 

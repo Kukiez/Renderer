@@ -101,28 +101,6 @@ void OpaquePass::onPassBegin(const GraphicsPassInvocationBase& invocation) {
 }
 
 void OpaquePass::onPassEnd(const GraphicsPassInvocationBase &invocation) {
-    auto renderTarget = invocation.getRenderTarget();
-
-    RenderTexture colorTarget;
-    RenderTexture depthTarget;
-
-    for (auto& target : renderTarget.targets()) {
-        if (target.isDepthAttachment()) {
-            depthTarget = target;
-        } else if (target.attachment == FramebufferAttachmentIndex::COLOR_0) {
-            colorTarget = target;
-        }
-    }
-
-    RenderPass renderPass(&invocation.getRenderer());
-    renderPass.createPass<SkyboxPass>("SkyboxPass",
-        colorTarget,
-        depthTarget,
-        invocation.getViewBuffer(),
-        skybox.envCubemap
-    );
-
-    invocation.getRenderer().render(renderPass);
 }
 
 void TransparentRenderingPass::onPassBegin(const GraphicsPassInvocationBase &invocation) {

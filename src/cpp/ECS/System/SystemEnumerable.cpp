@@ -35,8 +35,8 @@ void SystemEnumerable::reinitialize(const size_t newCount) {
     cexpr::require(enumerable);
     void* newEnumerable = mem::allocate(type, newCount);
 
-    mem::move(type, newEnumerable, enumerable, count);
-    constructCallback(mem::offset(type, newEnumerable, count), newCount - count);
+    type.move(newEnumerable, enumerable, count);
+    constructCallback(type.index(newEnumerable, count), newCount - count);
     mem::deallocate(type, enumerable);
 
     enumerable = newEnumerable;
@@ -45,7 +45,7 @@ void SystemEnumerable::reinitialize(const size_t newCount) {
 
 SystemEnumerable::~SystemEnumerable() {
     if (enumerable) {
-        mem::destroy_at(type, enumerable, count);
+        type.destroy(enumerable, count);
         mem::deallocate(type, enumerable);
     }
 }

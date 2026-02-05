@@ -18,13 +18,6 @@ public:
     }
 
     template <typename T>
-    T* allocateAligned(const size_t count, const size_t aligned) {
-        auto type = *mem::type_info::of<T>();
-        type.align = aligned;
-        return static_cast<T *>(allocate(mem::typeindex(&type), count));
-    }
-
-    template <typename T>
     T* allocateAsTrivial(const size_t count) {
         return static_cast<T *>(allocate(mem::type_info::of<T>(), count));
     }

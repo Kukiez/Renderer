@@ -14,78 +14,25 @@ namespace mem {
         return static_cast<char*>(ptr);
     }
 
-    constexpr size_t align_of(const type_info* type) {
-        return type->align;
+    inline void* allocate(typeindex type, const size_t count) {
+        return operator new(type.size() * count, std::align_val_t(type.align()));
     }
 
-    constexpr size_t size_of(const type_info* type) {
-        return type->size;
+    inline void deallocate(typeindex type, void* memory) {
+        operator delete(memory, std::align_val_t(type.align()));
     }
 
-    constexpr size_t hash_of(const type_info* type) {
-        return type->hash;
+    constexpr size_t aligned_offset(typeindex type, size_t byteOffset) {
+        return (byteOffset + type.align() - 1) & ~(type.align() - 1);
     }
 
-    constexpr const char* name_of(const type_info* type) {
-        return type->name;
-    }
-
-    constexpr size_t stride(const type_info* type) {
-        return (type->size + type->align - 1) & ~(type->align - 1);
-    }
-
-    constexpr void* offset(const type_info* type, void* memory, const size_t index) {
-        char* ptr = char_cast(memory);
-        return ptr + stride(type) * index;
-    }
-
-
-    inline void destroy_at(const type_info* type, void* memory, const size_t count = 1) {
-        if (type->destruct)
-            type->destruct(memory, count);
-    }
-
-    inline void* allocate(const type_info* type, const size_t count) {
-        return operator new(type->size * count, std::align_val_t(type->align));
-    }
-
-    inline void deallocate(const type_info* type, void* memory) {
-        operator delete(memory, std::align_val_t(type->align));
-    }
-
-    inline void move(const type_info* type, void* dst, void* src, const size_t count = 1) {
-        if (type->move)
-            type->move(dst, src, count);
-        else
-            default_memcpy(dst, src, type->size * count);
-    }
-
-    inline void copy(const type_info* type, void* dst, const void* src, const size_t count = 1) {
-        if (type->copy)
-            type->copy(dst, src, count);
-        else
-            default_memcpy(dst, src, type->size * count);
-    }
-
-    inline void swap(const type_info* type, void* first, void* second) {
-        type->swap(first, second);
-    }
-
-    constexpr size_t aligned_offset(const type_info* type, size_t byteOffset) {
-        return (byteOffset + type->align - 1) & ~(type->align - 1);
-    }
-
-    constexpr size_t padding(const type_info* type, size_t byteOffset) {
-        return (byteOffset + type->align - 1) & ~(type->align - 1) - byteOffset;
+    constexpr size_t padding(typeindex type, size_t byteOffset) {
+        return (byteOffset + type.align() - 1) & ~(type.align() - 1) - byteOffset;
     }
 
     constexpr size_t padding(size_t byteOffset, size_t alignment) {
         size_t aligned = (byteOffset + alignment - 1) & ~(alignment - 1);
         return aligned - byteOffset;
-    }
-
-    constexpr bool fits_in_address_of_type(const type_info* existingType, const type_info* newType) {
-        return (newType->size <= existingType->size && newType->align <= existingType->align);
     }
 
     template <int N, typename T>

@@ -1,6 +1,6 @@
 #version 460 core
 #extension GL_ARB_gpu_shader_int64 : enable
-#include "../common/brdf.glsl"
+#include "../Lighting/brdf.glsl"
 
 out vec4 FragColor;
 in vec3 v_WorldPos;

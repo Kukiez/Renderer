@@ -24,7 +24,7 @@ namespace mem {
 
         InvokeFn invokeFn = nullptr;
         void* func = nullptr;
-        const type_info* type = type_info_of<void>;
+        mem::typeindex type = type_info_of<void>;
         Alloc allocator;
     public:
         function() = default;

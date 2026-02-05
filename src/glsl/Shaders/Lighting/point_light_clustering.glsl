@@ -1,6 +1,7 @@
 #version 460
 #include "../lighting/light.glsl"
 #include "../common/global_transforms.glsl"
+#include "../common/aabb.glsl"
 #line 5
 
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;

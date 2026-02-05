@@ -13,16 +13,16 @@ void SkyboxRenderer::onLoad(RendererLoadView view) {
     });
 
     hdriLoadShader = shaderFactory.loadShader({
-        .vertex = "shaders/Lighting/hdri_vertex_load.glsl",
-        .fragment = "shaders/Lighting/hdri_frag_load.glsl"
+        .vertex = "shaders/Skybox/hdri_vertex_load.glsl",
+        .fragment = "shaders/Skybox/hdri_frag_load.glsl"
     });
     irradianceMapShader = shaderFactory.loadShader({
-        .vertex = "shaders/Lighting/hdri_vertex_load.glsl",
-        .fragment = "shaders/Lighting/hdri_irradiance_frag.glsl"
+        .vertex = "shaders/Skybox/hdri_vertex_load.glsl",
+        .fragment = "shaders/Skybox/hdri_irradiance_frag.glsl"
     });
     prefilterMapShader = shaderFactory.loadShader({
-        .vertex = "shaders/Lighting/hdri_vertex_load.glsl",
-        .fragment = "shaders/Lighting/ibl_prefilter_frag.glsl"
+        .vertex = "shaders/Skybox/hdri_vertex_load.glsl",
+        .fragment = "shaders/Skybox/ibl_prefilter_frag.glsl"
     });
 
     GeometryFactory geoFactory(view.getRenderer());

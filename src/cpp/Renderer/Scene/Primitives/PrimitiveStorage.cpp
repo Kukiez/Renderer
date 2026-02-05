@@ -4,7 +4,7 @@ PrimitiveStorage::~PrimitiveStorage() {
     for (auto& collection : collections) {
         if (collection.collectionData) {
             auto& type = allocators[collection.getType().id()].type;
-            mem::destroy_at(type, collection.collectionData);
+            type.destroy(collection.collectionData);
         }
     }
 
